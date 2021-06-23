@@ -34,6 +34,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 public class CustomUserAttrController {
+    
+    // try {
+        // System.out.println("\n\nentre a key\n\n");
+        Keycloak instance = Keycloak.getInstance("http://localhost:8080/auth", "master", "admin", "admin","admin-cli", "password");                                                                                                    
+        TokenManager tokenmanager = instance.tokenManager();
+        CredentialRepresentation credential = new CredentialRepresentation();
+    // } catch(Exception e){
+    //     System.out.println(e);
+    // }
 
     @Autowired
     UserService userService;
@@ -86,22 +95,18 @@ public class CustomUserAttrController {
 
 
         try {
-            System.out.println("\n\nentre a key\n\n");
-            Keycloak instance = Keycloak.getInstance("http://localhost:8080/auth", "master", "admin", "admin","admin-cli", "password");                                                                                                    
-            TokenManager tokenmanager = instance.tokenManager();
-            CredentialRepresentation credential = new CredentialRepresentation();
             System.out.println(credential);
             credential.setType(CredentialRepresentation.PASSWORD);
-            credential.setValue("prueba2");
-            // credential.setTemporary(user.passwordExpired)
+            credential.setValue("prueba6");
+            credential.setTemporary(true);
             UserRepresentation userN = new UserRepresentation();
-            userN.setUsername("prueba2");
-            userN.setFirstName("prueba2");
-            userN.setLastName("User");
+            userN.setUsername("prueba6");
+            userN.setFirstName("prueba6");
+            userN.setLastName("User6");
             userN.setCredentials(Arrays.asList(credential));
-            // userN.setEnabled(user.enabled);
-            // userN.setGroups(Arrays.asList("R_STATION"))
-            userN.setEmail("prueba@gmail.com");
+            userN.setEnabled(true);
+            userN.setGroups(Arrays.asList("R_STATION"));
+            userN.setEmail("prueba6@gmail.com");
             instance.realm("master").users().create(userN);
             System.out.println("\n\nsali a key\n\n" + userN);
         } catch (Exception e) {
