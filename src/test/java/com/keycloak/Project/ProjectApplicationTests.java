@@ -1,10 +1,10 @@
-package com.back.dashboard.keycloak;
+package com.keycloak.Project;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class KeycloakApplicationTests {
+class ProjectApplicationTests {
 
 	@Test
 	void contextLoads() {

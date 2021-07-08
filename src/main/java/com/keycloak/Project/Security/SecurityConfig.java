@@ -1,4 +1,4 @@
-package com.back.dashboard.keycloak.security;
+package com.keycloak.Project.Security;
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
@@ -37,7 +37,6 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         return new KeycloakSpringBootConfigResolver();
     }
 
-    // Specifies the session authentication strategy
     @Bean
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
@@ -47,11 +46,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
-        http.authorizeRequests()
-            .antMatchers("/customers*", "/users*", "/user*")
-            // .hasRole("user", "admin")
-            .hasAnyRole("user", "admin")
-            .anyRequest()
-            .permitAll();
+        http.cors().and().csrf().disable().authorizeRequests().antMatchers("/customers*", "/users*", "/user*")
+                .hasAnyRole("user", "admin").anyRequest().permitAll();
     }
 }
