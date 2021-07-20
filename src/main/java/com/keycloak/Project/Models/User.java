@@ -18,7 +18,7 @@ public class User {
     private String realm;
     private String role;
     private Boolean enable;
-    public User() {
+    public User() { 
     }
 
     public User(Long id, String username, String lastname, String firstname,  String email, String password, String realm, String role, Boolean enable) {

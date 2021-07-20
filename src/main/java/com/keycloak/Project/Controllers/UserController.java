@@ -1,5 +1,6 @@
 package com.keycloak.Project.Controllers;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 import org.keycloak.adapters.springsecurity.client.*;
 //import org.keycloak.keycloak-admin-client.*
@@ -30,46 +32,58 @@ import org.keycloak.admin.client.token.TokenManager;
 //import org.keycloak.representations.idm.UserRepresentation
 import org.keycloak.admin.client.resource.UserResource;
 
+
 import com.keycloak.Project.Models.User;
 import com.keycloak.Project.Repository.UserRepository;
+import com.keycloak.Project.Services.UserService;
 
 @RestController
 @RequestMapping("/user")
-public class UserController {
+public class UserController{
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    UserService userService;
 
     @RequestMapping(value = "/userK", method = RequestMethod.GET)
     public ResponseEntity<String> getUser(@RequestHeader String Authorization) {
         KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext()
-                .getAuthentication();
-        final Principal principal = (Principal) authentication.getPrincipal();
-
-        System.out.println("entre con el usuario: " + principal);
-        return ResponseEntity.ok("Hello " + principal);
+            .getAuthentication();
+        final Principal principal = (Principal) authentication.getPrincipal(); 
+        System.out.println("entre con el usuario: "+ principal);
+        return ResponseEntity.ok("Hello "+ principal);
     }
 
     @GetMapping("/viewUsers")
-    List<UserRepresentation> users(@RequestHeader String Authorization) {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
-        List<UserRepresentation> lsUsersU = instanceU.realm("SpringBoot").users().search("");
-        System.out.println("Lista de usuarios");
+    List<UserRepresentation> userss(@RequestHeader String Authorization) {
+        List<UserRepresentation> lsUsersU = new ArrayList<UserRepresentation>();
+        try{
+            lsUsersU = userService.users();
+            System.out.println("Lista de usuarios");
+        }catch(Exception ev){
+            System.out.println(ev);
+        }
         return lsUsersU;
     }
 
     @GetMapping("/viewUser/{id}")
-    UserRepresentation user(@RequestHeader String Authorization, @PathVariable String id) {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
-        UserResource userUp = instanceU.realm("SpringBoot").users().get(id);
-        UserRepresentation userU = userUp.toRepresentation();
+    UserRepresentation user(@RequestHeader String Authorization,@PathVariable String id) {
+        UserRepresentation userU = new UserRepresentation();
+        try{
+            userU = userService.user(id);
+            System.out.println("Usuario consultado");
+        }catch(Exception eco){
+            System.out.println(eco);
+            System.out.println("Usuario no encontrado");
+        }
         return userU;
     }
 
+
     @PostMapping("/createUser")
     @ResponseStatus(HttpStatus.CREATED)
-    User createUser(@RequestBody User user, @RequestHeader String Authorization) {
+    void createUser(@RequestBody User user, @RequestHeader String Authorization) {
         String username = user.getUsername();
         String lastname = user.getLastname();
         String firstname = user.getFirstname();
@@ -78,36 +92,18 @@ public class UserController {
         String realm = user.getRealm();
         String role = user.getRole();
         Boolean enable = user.getEnable();
+        String creadoKey = "";
         try {
-            Keycloak instance = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                    "user1", "login", "password");
-            TokenManager tokenmanager = instance.tokenManager();
-            // String accessToken = tokenmanager.getAccessTokenString();
-            // System.out.println(tokenmanager.getAccessTokenString());
-            CredentialRepresentation credential = new CredentialRepresentation();
-            credential.setType(CredentialRepresentation.PASSWORD);
-            credential.setValue(pass);
-            credential.setTemporary(true);
-            UserRepresentation userN = new UserRepresentation();
-            userN.setUsername(username);
-            userN.setFirstName(firstname);
-            userN.setLastName(lastname);
-            userN.setCredentials(Arrays.asList(credential));
-            userN.setEnabled(enable);
-            // userN.setGroups(Arrays.asList("user"));
-            userN.setEmail(email);
-            instance.realm(realm).users().create(userN);
-            System.out.println("si se creo en keycloak");
-            // user.lastLogin = new Date();
-            // userService.save(user)
+            creadoKey = userService.createUser(username,lastname,firstname,email,pass,realm,role,enable);
+            System.out.println(creadoKey);
         } catch (Exception e) {
             System.out.println("no creado: " + e);
         }
-        return repository.save(user);
+        // return repository.save(user); 
     }
 
     @PutMapping("/updateUser/{id}")
-    void updateUser(@RequestBody User user, @RequestHeader String Authorization, @PathVariable String id) {
+    void updateUser(@RequestBody User user, @RequestHeader String Authorization, @PathVariable String id){
         String username = user.getUsername();
         String lastname = user.getLastname();
         String firstname = user.getFirstname();
@@ -116,29 +112,24 @@ public class UserController {
         String realm = user.getRealm();
         String role = user.getRole();
         Boolean enable = user.getEnable();
-
-        Keycloak instance = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
-        UserResource userUp = instance.realm("SpringBoot").users().get(id);
-        UserRepresentation userRep = userUp.toRepresentation();
-        CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setType(CredentialRepresentation.PASSWORD);
-        credential.setValue(pass);
-        credential.setTemporary(true);
-        userRep.setUsername(username);
-        userRep.setFirstName(firstname);
-        userRep.setLastName(lastname);
-        userRep.setCredentials(Arrays.asList(credential));
-        userRep.setEnabled(enable);
-        userRep.setEmail(email);
-        userUp.update(userRep);
+        String upUser = "";
+        try{
+            upUser = userService.updateUser(id, username, lastname, firstname, email, pass, realm, role, enable);
+            System.out.println(upUser);
+        }catch(Exception eu){
+            System.out.println(eu);
+        }
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    void deleteUser(@RequestHeader String Authorization, @PathVariable String id) {
-        Keycloak instance = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
-        instance.realm("SpringBoot").users().get(id).remove();
+    void deleteUser(@RequestHeader String Authorization, @PathVariable String id){
+        String deleteU = "";
+        try{
+            deleteU = userService.deleteUser(id);
+            System.out.println(deleteU);
+        }catch(Exception ed){
+            System.out.println(ed);
+        }
     }
 
 }
