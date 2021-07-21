@@ -1,4 +1,4 @@
-package com.keycloak.Project.Services;
+package com.keycloak.Project.Services;  
 
 import com.keycloak.Project.Models.User;
 import com.keycloak.Project.Repository.UserRepository;
@@ -25,32 +25,32 @@ import org.keycloak.admin.client.token.TokenManager;
 //import org.keycloak.representations.idm.UserRepresentation
 import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.stereotype.Component;
-
+ 
 @Component
-public class UserService {
-    public Keycloak instance() {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+public class UserService{
+    public Keycloak instance(){
+        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1", "user1", "login", "password");
         return instanceU;
     }
 
-    public List<UserRepresentation> users() {
-        Keycloak instance = instance();
+    public List<UserRepresentation> users(){
+        Keycloak instance = instance(); 
         List<UserRepresentation> lsUsersU = instance.realm("SpringBoot").users().search("");
         return lsUsersU;
     }
 
-    public UserRepresentation user(String id) {
+    public UserRepresentation user(String id){
         Keycloak instance = instance();
         UserResource userUp = instance.realm("SpringBoot").users().get(id);
         UserRepresentation userU = userUp.toRepresentation();
         return userU;
     }
 
-    public String createUser(String username, String lastname, String firstname, String email, String pass,
-            String realm, String role, Boolean enable) {
+    public String createUser(String username, String lastname, String firstname, String email, String pass, String realm, String role, Boolean enable){
         Keycloak instance = instance();
         CredentialRepresentation credential = new CredentialRepresentation();
+        // RealmResource realmResource = instance.realm(realm);
+        // RoleRepresentation realmRole = realmResource.roles().get(role).toRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(pass);
         credential.setTemporary(true);
@@ -65,12 +65,11 @@ public class UserService {
         // System.out.println(userN);
         instance.realm(realm).users().create(userN);
 
-        return "Usuario " + username + " Creado";
+        return "Usuario "+username+" Creado";
     }
 
-    public String updateUser(String id, String username, String lastname, String firstname, String email, String pass,
-            String realm, String role, Boolean enable) {
-        Keycloak instance = instance();
+    public String updateUser(String id, String username, String lastname, String firstname, String email, String pass, String realm, String role, Boolean enable){
+        Keycloak instance = instance(); 
         UserResource userUp = instance.realm("SpringBoot").users().get(id);
         UserRepresentation userRep = userUp.toRepresentation();
         CredentialRepresentation credential = new CredentialRepresentation();
@@ -82,17 +81,16 @@ public class UserService {
         userRep.setLastName(lastname);
         userRep.setCredentials(Arrays.asList(credential));
         userRep.setEnabled(enable);
-        userRep.setEmail(email);
+        userRep.setEmail(email); 
         userUp.update(userRep);
 
-        return "Usuario " + username + " Actualizado";
+        return "Usuario "+username+" Actualizado";
     }
 
-    public String deleteUser(String id) {
+    public String deleteUser(String id){
         Keycloak instance = instance();
-
         instance.realm("SpringBoot").users().get(id).remove();
-        return "El usuario con el id: " + id + " se elimino correctamente.";
+        return "El usuario con el id: "+id+ " se elimino correctamente.";
 
     }
 }

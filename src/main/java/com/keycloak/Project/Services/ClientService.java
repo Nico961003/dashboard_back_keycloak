@@ -100,7 +100,7 @@ public class ClientService{
             List<String> redirectUris = new ArrayList<String>();
             redirectUris.add(adminUrl);
             cliente.setRedirectUris(redirectUris);
-            instance.realm("SpringBoot").clients().get(name).update(cliente);
+            instance.realm(realm).clients().get(name).update(cliente);
 
             updateC = "Se actualizo el cliente " + name ;
         }catch(Exception eup){
