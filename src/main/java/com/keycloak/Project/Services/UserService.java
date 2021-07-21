@@ -35,8 +35,8 @@ public class UserService {
     }
 
     public Keycloak instanceT(String realm, String user, String password) {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", realm, user, password,
+                "login", "password");
         return instanceU;
     }
 
