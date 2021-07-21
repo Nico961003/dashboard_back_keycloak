@@ -1,6 +1,5 @@
 package com.keycloak.Project.Controllers;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,26 +29,30 @@ import org.keycloak.admin.client.token.TokenManager;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.admin.client.resource.*;
 // import com.keycloak.Project.Services.UserService;
+import com.keycloak.Project.Models.User;
 
 @RestController
 @RequestMapping("/token")
-public class TokenController{
+public class TokenController {
     @Autowired
     UserService userService;
 
     @GetMapping("/newToken")
-    public ResponseEntity<String> token(){
+    public ResponseEntity<String> token(@RequestBody User user) {
+        String name = user.getUsername();
+        String pass = user.getPassword();
+        String realm = "SpringBoot";// user.getRealm();
         String tok = "";
-        try{
-            Keycloak instance = userService.instance();
+        try {
+            Keycloak instance = userService.instanceT(realm, name, pass);
             TokenManager tokenmanager = instance.tokenManager();
             String accessToken = tokenmanager.getAccessTokenString();
             // println(tokenmanager.getAccessTokenString())
 
             tok = accessToken;
             System.out.println(tok);
-        }catch(Exception eto){
-            System.out.println("No se pudo ontener token \n"+ eto);
+        } catch (Exception eto) {
+            System.out.println("No se pudo ontener token \n" + eto);
         }
         return ResponseEntity.ok(tok);
     }
