@@ -37,7 +37,7 @@ public class TokenController {
     @Autowired
     UserService userService;
 
-    @GetMapping("/newToken")
+    @PostMapping("/newToken")
     public ResponseEntity<String> token(@RequestBody User user) {
         String name = user.getUsername();
         String pass = user.getPassword();
@@ -52,7 +52,7 @@ public class TokenController {
             tok = accessToken;
             System.out.println(tok);
         } catch (Exception eto) {
-            System.out.println("No se pudo ontener token \n" + eto);
+            System.out.println("No se pudo obtener token \n" + eto);
         }
         return ResponseEntity.ok(tok);
     }
