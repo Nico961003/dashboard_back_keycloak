@@ -48,7 +48,8 @@ public class ClientService {
         return cliente;
     }
 
-    public String createClient(String name, String rootUrl, String adminUrl, String realm) {
+    public String createClient(String name, String rootUrl, String adminUrl, String realm, Boolean enabled,
+            String description) {
         System.out.println(name + " " + rootUrl + " " + adminUrl + " " + realm);
         Keycloak instance = instance();
         ClientRepresentation cliente = new ClientRepresentation();
@@ -68,6 +69,8 @@ public class ClientService {
             cliente.setRedirectUris(redirectUris);
             cliente.setRootUrl(rootUrl);
             cliente.setAdminUrl(adminUrl);
+            cliente.setEnabled(enabled);
+            cliente.setDescription(description);
             // cliente.setBaseUrl("");
 
             // realmResource.clients().create(cliente);
