@@ -103,8 +103,11 @@ public class ClientController {
         String rootUrl = client.getRootUrl();
         String adminUrl = client.getAdminUrl();
         String realm = client.getRealm();
+        Boolean enabled = client.getEnabled();
+        String description = client.getDescription();
+
         try {
-            updateC = clientService.updateClient(name, rootUrl, adminUrl, realm);
+            updateC = clientService.updateClient(name, rootUrl, adminUrl, realm, enabled, description);
 
         } catch (Exception exup) {
             System.out.println(exup);

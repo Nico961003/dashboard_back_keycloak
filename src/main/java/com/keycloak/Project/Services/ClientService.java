@@ -99,18 +99,34 @@ public class ClientService {
         return borrarCliente;
     }
 
-    public String updateClient(String name, String rootUrl, String adminUrl, String realm) {
+    public String updateClient(String name, String rootUrl, String adminUrl, String realm, Boolean enabled,
+            String description) {
 
         String updateC = "";
         Keycloak instance = instance();
         try {
             ClientRepresentation cliente = instance.realm("SpringBoot").clients().findByClientId(name).get(0);
+            // cliente.setBearerOnly(false);
+            // cliente.setPublicClient(false);
+            // cliente.setProtocol("openid-connect");
+            // List<String> redirectUris = new ArrayList<String>();
+            // redirectUris.add(adminUrl);
+            // cliente.setRedirectUris(redirectUris);
             cliente.setBearerOnly(false);
             cliente.setPublicClient(false);
+            // cliente.setSecret("******");
             cliente.setProtocol("openid-connect");
             List<String> redirectUris = new ArrayList<String>();
-            redirectUris.add(adminUrl);
+            List<String> webUris = new ArrayList<String>();
+            webUris.add(adminUrl);
+            cliente.setWebOrigins(webUris);
+            redirectUris.add(adminUrl + "/*");
             cliente.setRedirectUris(redirectUris);
+            cliente.setRootUrl(rootUrl);
+            cliente.setAdminUrl(adminUrl);
+            cliente.setEnabled(enabled);
+            cliente.setDescription(description);
+            // cliente.setBaseUrl("");
             instance.realm(realm).clients().get(name).update(cliente);
 
             updateC = "Se actualizo el cliente " + name;
