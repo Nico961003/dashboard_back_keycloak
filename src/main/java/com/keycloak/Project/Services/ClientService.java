@@ -1,4 +1,4 @@
-package com.keycloak.Project.Services;  
+package com.keycloak.Project.Services;
 
 import com.keycloak.Project.Models.Client;
 import com.keycloak.Project.Repository.ClientRepository;
@@ -29,30 +29,31 @@ import org.springframework.stereotype.Component;
 import org.keycloak.admin.client.resource.*;
 
 @Component
-public class ClientService{
-    public Keycloak instance(){
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1", "user1", "login", "password");
+public class ClientService {
+    public Keycloak instance() {
+        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
+                "user1", "login", "password");
         return instanceU;
     }
 
-    public List<ClientRepresentation> clients(){
+    public List<ClientRepresentation> clients() {
         Keycloak instance = instance();
-        List<ClientRepresentation> lsClientes =  instance.realm("SpringBoot").clients().findAll();
+        List<ClientRepresentation> lsClientes = instance.realm("SpringBoot").clients().findAll();
         return lsClientes;
     }
 
-    public ClientRepresentation client(String name){
+    public ClientRepresentation client(String name) {
         Keycloak instance = instance();
         ClientRepresentation cliente = instance.realm("SpringBoot").clients().findByClientId(name).get(0);
         return cliente;
     }
 
-    public String createClient(String name, String rootUrl, String adminUrl,  String realm){
-        // System.out.println(name+" "+ rootUrl+" "+ adminUrl+" "+ realm);
+    public String createClient(String name, String rootUrl, String adminUrl, String realm) {
+        System.out.println(name + " " + rootUrl + " " + adminUrl + " " + realm);
         Keycloak instance = instance();
         ClientRepresentation cliente = new ClientRepresentation();
-        String mess= "";
-        try{
+        String mess = "";
+        try {
             cliente.setId(name);
             cliente.setName(name);
             cliente.setBearerOnly(false);
@@ -60,39 +61,46 @@ public class ClientService{
             // cliente.setSecret("******");
             cliente.setProtocol("openid-connect");
             List<String> redirectUris = new ArrayList<String>();
-            redirectUris.add(adminUrl);
+            List<String> webUris = new ArrayList<String>();
+            webUris.add(adminUrl);
+            cliente.setWebOrigins(webUris);
+            redirectUris.add(adminUrl + "/*");
             cliente.setRedirectUris(redirectUris);
+            cliente.setRootUrl(rootUrl);
+            cliente.setAdminUrl(adminUrl);
+            // cliente.setBaseUrl("");
+
             // realmResource.clients().create(cliente);
             instance.realm(realm).clients().create(cliente);
-            mess= "Cliente creado";
-        }catch(Exception ecl){
+            mess = "Cliente " + name + " creado";
+        } catch (Exception ecl) {
             System.out.println(ecl);
-            mess= "Cliente no creado";
+            mess = "Cliente no creado";
         }
 
         return mess;
     }
 
-    public String deleteClient(String name){
+    public String deleteClient(String name) {
         String borrarCliente = "";
         Keycloak instance = instance();
-        try{
+        try {
 
             instance.realm("SpringBoot").clients().get(name).remove();
 
             borrarCliente = "Se borro el cliente " + name;
-        }catch(Exception ed){
+        } catch (Exception ed) {
             System.out.println(ed);
             borrarCliente = "No se borro cliente";
         }
         return borrarCliente;
     }
 
-    public String updateClient(String name, String rootUrl, String adminUrl,  String realm){
+    public String updateClient(String name, String rootUrl, String adminUrl, String realm) {
 
         String updateC = "";
         Keycloak instance = instance();
-        try{
+        try {
             ClientRepresentation cliente = instance.realm("SpringBoot").clients().findByClientId(name).get(0);
             cliente.setBearerOnly(false);
             cliente.setPublicClient(false);
@@ -102,14 +110,12 @@ public class ClientService{
             cliente.setRedirectUris(redirectUris);
             instance.realm(realm).clients().get(name).update(cliente);
 
-            updateC = "Se actualizo el cliente " + name ;
-        }catch(Exception eup){
+            updateC = "Se actualizo el cliente " + name;
+        } catch (Exception eup) {
             System.out.println(eup);
             updateC = "No se actualizo cliente";
         }
         return updateC;
     }
-
-
 
 }
