@@ -1,6 +1,5 @@
 package com.keycloak.Project.Controllers;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,14 +31,13 @@ import org.keycloak.admin.client.token.TokenManager;
 //import org.keycloak.representations.idm.UserRepresentation
 import org.keycloak.admin.client.resource.UserResource;
 
-
 import com.keycloak.Project.Models.User;
 import com.keycloak.Project.Repository.UserRepository;
 import com.keycloak.Project.Services.UserService;
 
 @RestController
 @RequestMapping("/user")
-public class UserController{
+public class UserController {
     @Autowired
     private UserRepository repository;
 
@@ -49,61 +47,53 @@ public class UserController{
     @RequestMapping(value = "/userK", method = RequestMethod.GET)
     public ResponseEntity<String> getUser(@RequestHeader String Authorization) {
         KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext()
-            .getAuthentication();
-        final Principal principal = (Principal) authentication.getPrincipal(); 
-        System.out.println("entre con el usuario: "+ principal);
-        return ResponseEntity.ok("Hello "+ principal);
+                .getAuthentication();
+        final Principal principal = (Principal) authentication.getPrincipal();
+        System.out.println("entre con el usuario: " + principal);
+        return ResponseEntity.ok("Hello " + principal);
     }
 
     @GetMapping("/viewUsers")
     List<UserRepresentation> userss(@RequestHeader String Authorization) {
         List<UserRepresentation> lsUsersU = new ArrayList<UserRepresentation>();
-        try{
+        try {
             lsUsersU = userService.users();
             System.out.println("Lista de usuarios");
-        }catch(Exception ev){
+        } catch (Exception ev) {
             System.out.println(ev);
         }
         return lsUsersU;
     }
 
     @GetMapping("/viewUser/{id}")
-    UserRepresentation user(@RequestHeader String Authorization,@PathVariable String id) {
+    UserRepresentation user(@RequestHeader String Authorization, @PathVariable String id) {
         UserRepresentation userU = new UserRepresentation();
-        try{
+        try {
             userU = userService.user(id);
             System.out.println("Usuario consultado");
-        }catch(Exception eco){
+        } catch (Exception eco) {
             System.out.println(eco);
             System.out.println("Usuario no encontrado");
         }
         return userU;
     }
 
-
     @PostMapping("/createUser")
     @ResponseStatus(HttpStatus.CREATED)
     void createUser(@RequestBody User user, @RequestHeader String Authorization) {
-        String username = user.getUsername();
-        String lastname = user.getLastname();
-        String firstname = user.getFirstname();
-        String email = user.getEmail();
-        String pass = user.getPassword();
-        String realm = user.getRealm();
-        String role = user.getRole();
-        Boolean enable = user.getEnable();
+
         String creadoKey = "";
         try {
-            creadoKey = userService.createUser(username,lastname,firstname,email,pass,realm,role,enable);
+            creadoKey = userService.createUser(user);
             System.out.println(creadoKey);
         } catch (Exception e) {
             System.out.println("no creado: " + e);
         }
-        // return repository.save(user); 
+        // return repository.save(user);
     }
 
     @PutMapping("/updateUser/{id}")
-    void updateUser(@RequestBody User user, @RequestHeader String Authorization, @PathVariable String id){
+    void updateUser(@RequestBody User user, @RequestHeader String Authorization, @PathVariable String id) {
         String username = user.getUsername();
         String lastname = user.getLastname();
         String firstname = user.getFirstname();
@@ -113,21 +103,21 @@ public class UserController{
         String role = user.getRole();
         Boolean enable = user.getEnable();
         String upUser = "";
-        try{
+        try {
             upUser = userService.updateUser(id, username, lastname, firstname, email, pass, realm, role, enable);
             System.out.println(upUser);
-        }catch(Exception eu){
+        } catch (Exception eu) {
             System.out.println(eu);
         }
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    void deleteUser(@RequestHeader String Authorization, @PathVariable String id){
+    void deleteUser(@RequestHeader String Authorization, @PathVariable String id) {
         String deleteU = "";
-        try{
+        try {
             deleteU = userService.deleteUser(id);
             System.out.println(deleteU);
-        }catch(Exception ed){
+        } catch (Exception ed) {
             System.out.println(ed);
         }
     }

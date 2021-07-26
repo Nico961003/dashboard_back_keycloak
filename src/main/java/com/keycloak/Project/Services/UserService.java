@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.Collections;
 import org.keycloak.adapters.springsecurity.client.*;
+import java.util.ArrayList;
 //import org.keycloak.keycloak-admin-client.*
 import org.keycloak.admin.client.*;
 import org.keycloak.representations.idm.*;
@@ -25,6 +27,8 @@ import org.keycloak.admin.client.token.TokenManager;
 //import org.keycloak.representations.idm.UserRepresentation
 import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.stereotype.Component;
+import org.keycloak.models.AdminRoles;
+// import org.keycloak.models.Constants;
 
 @Component
 public class UserService {
@@ -53,8 +57,22 @@ public class UserService {
         return userU;
     }
 
-    public String createUser(String username, String lastname, String firstname, String email, String pass,
-            String realm, String role, Boolean enable) {
+    public String createUser(User user) {
+
+        String username = user.getUsername();
+        String lastname = user.getLastname();
+        String firstname = user.getFirstname();
+        String email = user.getEmail();
+        String pass = user.getPassword();
+        String realm = user.getRealm();
+        String role = user.getRole();
+        Boolean enable = user.getEnable();
+        // System.out.println("Username: " + username + "\n" + "LastName: " + lastname +
+        // "\n" + "FirstName: " + firstname
+        // + "\n" + "email: " + email + "\n" + "Password: " + pass + "\n" + "Realm: " +
+        // realm + "\n" + "Role: "
+        // + role + "\n" + "Enable: " + enable + "\n");
+        System.out.println(user);
         Keycloak instance = instance();
         CredentialRepresentation credential = new CredentialRepresentation();
         // RealmResource realmResource = instance.realm(realm);
@@ -69,7 +87,13 @@ public class UserService {
         userN.setLastName(lastname);
         userN.setCredentials(Arrays.asList(credential));
         userN.setEnabled(enable);
-        // userN.setGroups(Arrays.asList("user"));
+        userN.setGroups(Arrays.asList(role));
+        // userN.setClientRoles(Collections.singletonMap(Constants.REALM_MANAGEMENT_CLIENT_ID,
+        // Collections.singletonList(AdminRoles.MANAGE_CLIENTS)));
+        // List<String> rolels = new ArrayList<String>();
+        // rolels.add(role);
+        // System.out.println(rolels);
+        // userN.setRealmRoles(Arrays.asList("user"));
         userN.setEmail(email);
         // System.out.println(userN);
         instance.realm(realm).users().create(userN);

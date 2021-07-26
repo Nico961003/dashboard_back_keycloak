@@ -40,6 +40,9 @@ dependencies {
 	// compileOnly group: 'org.keycloak', name: 'keycloak-broker-oidc', version: '1.8.1.Final'
 	// implementation group: 'org.keycloak', name: 'keycloak-oidc-client-adapter-pom', version: '14.0.0', ext: 'pom'
 	compileOnly group: 'org.keycloak', name: 'keycloak-services', version: '14.0.0'
+	compileOnly group: 'org.keycloak', name: 'keycloak-server-spi', version: '14.0.0'
+	compileOnly group: 'org.keycloak', name: 'keycloak-model-api', version: '1.8.1.Final'
+
 	
 	// compile group: 'org.keycloak', name: 'keycloak-saml-protocol', version: '1.8.1.Final'
     // compile group: 'org.keycloak', name: 'keycloak-core', version: '13.0.1'

@@ -18,10 +18,12 @@ public class User {
     private String realm;
     private String role;
     private Boolean enable;
-    public User() { 
+
+    public User() {
     }
 
-    public User(Long id, String username, String lastname, String firstname,  String email, String password, String realm, String role, Boolean enable) {
+    public User(Long id, String username, String lastname, String firstname, String email, String password,
+            String realm, String role, Boolean enable) {
         this.id = id;
         this.username = username;
         this.lastname = lastname;
@@ -33,7 +35,8 @@ public class User {
         this.enable = enable;
     }
 
-    public User(String username, String lastname, String firstname, String email, String password, String realm, String role, Boolean enable) {
+    public User(String username, String lastname, String firstname, String email, String password, String realm,
+            String role, Boolean enable) {
         this.username = username;
         this.lastname = lastname;
         this.firstname = firstname;
@@ -76,58 +79,51 @@ public class User {
         this.firstname = firstname;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
-    public void setEmail(String email){
+
+    public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getPassword(){
+    public String getPassword() {
         return password;
     }
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         this.password = password;
     }
 
-    public String getRealm(){
+    public String getRealm() {
         return realm;
     }
-    public void setRealm(String realm){
+
+    public void setRealm(String realm) {
         this.realm = realm;
     }
 
-    public String getRole(){
-        return password;
+    public String getRole() {
+        return role;
     }
-    public void setRole(String role){
+
+    public void setRole(String role) {
         this.role = role;
     }
 
-    public Boolean getEnable(){
+    public Boolean getEnable() {
         return enable;
     }
-    public void setEnable(Boolean enable){
+
+    public void setEnable(Boolean enable) {
         this.enable = enable;
     }
 
-
-
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", lastname='" + lastname + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", email="+ email + '\''+
-                ", password="+ password +'\''+
-                ", realm="+ realm +'\''+
-                ", role="+ role +'\''+
-                ", enable="+ enable +'\''+
-                '}';
+        return "User{" + "id=" + id + ", username='" + username + '\'' + ", lastname='" + lastname + '\''
+                + ", firstname='" + firstname + '\'' + ", email=" + email + '\'' + ", password=" + password + '\''
+                + ", realm=" + realm + '\'' + ", role=" + role + '\'' + ", enable=" + enable + '\'' + '}';
     }
-
-    
 
 }
