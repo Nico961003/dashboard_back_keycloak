@@ -95,16 +95,16 @@ public class UserController {
     @PutMapping("/updateUser/{id}")
     void updateUser(@RequestBody User user, @RequestHeader String Authorization, @PathVariable String id) {
         String username = user.getUsername();
-        String lastname = user.getLastname();
-        String firstname = user.getFirstname();
+        String lastName = user.getLastName();
+        String firstName = user.getFirstName();
         String email = user.getEmail();
         String pass = user.getPassword();
         String realm = user.getRealm();
-        String role = user.getRole();
-        Boolean enable = user.getEnable();
+        String group = user.getGroup();
+        Boolean enabled = user.getEnabled();
         String upUser = "";
         try {
-            upUser = userService.updateUser(id, username, lastname, firstname, email, pass, realm, role, enable);
+            upUser = userService.updateUser(id, username, lastName, firstName, email, pass, realm, group, enabled);
             System.out.println(upUser);
         } catch (Exception eu) {
             System.out.println(eu);

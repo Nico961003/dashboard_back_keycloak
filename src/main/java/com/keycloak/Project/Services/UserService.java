@@ -60,40 +60,40 @@ public class UserService {
     public String createUser(User user) {
 
         String username = user.getUsername();
-        String lastname = user.getLastname();
-        String firstname = user.getFirstname();
+        String lastName = user.getLastName();
+        String firstName = user.getFirstName();
         String email = user.getEmail();
         String pass = user.getPassword();
         String realm = user.getRealm();
-        String role = user.getRole();
-        Boolean enable = user.getEnable();
-        // System.out.println("Username: " + username + "\n" + "LastName: " + lastname +
-        // "\n" + "FirstName: " + firstname
+        String group = user.getGroup();
+        Boolean enabled = user.getEnabled();
+        // System.out.println("userName: " + userName + "\n" + "lastName: " + lastName +
+        // "\n" + "firstName: " + firstName
         // + "\n" + "email: " + email + "\n" + "Password: " + pass + "\n" + "Realm: " +
-        // realm + "\n" + "Role: "
-        // + role + "\n" + "Enable: " + enable + "\n");
+        // realm + "\n" + "group: "
+        // + group + "\n" + "Enable: " + enable + "\n");
         System.out.println(user);
         Keycloak instance = instance();
         CredentialRepresentation credential = new CredentialRepresentation();
         // RealmResource realmResource = instance.realm(realm);
-        // RoleRepresentation realmRole =
-        // realmResource.roles().get(role).toRepresentation();
+        // groupRepresentation realmgroup =
+        // realmResource.groups().get(group).toRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(pass);
         credential.setTemporary(true);
         UserRepresentation userN = new UserRepresentation();
         userN.setUsername(username);
-        userN.setFirstName(firstname);
-        userN.setLastName(lastname);
+        userN.setFirstName(firstName);
+        userN.setLastName(lastName);
         userN.setCredentials(Arrays.asList(credential));
-        userN.setEnabled(enable);
-        userN.setGroups(Arrays.asList(role));
-        // userN.setClientRoles(Collections.singletonMap(Constants.REALM_MANAGEMENT_CLIENT_ID,
-        // Collections.singletonList(AdminRoles.MANAGE_CLIENTS)));
-        // List<String> rolels = new ArrayList<String>();
-        // rolels.add(role);
-        // System.out.println(rolels);
-        // userN.setRealmRoles(Arrays.asList("user"));
+        userN.setEnabled(enabled);
+        userN.setGroups(Arrays.asList(group));
+        // userN.setClientgroups(Collections.singletonMap(Constants.REALM_MANAGEMENT_CLIENT_ID,
+        // Collections.singletonList(Admingroups.MANAGE_CLIENTS)));
+        // List<String> groupls = new ArrayList<String>();
+        // groupls.add(group);
+        // System.out.println(groupls);
+        // userN.setRealmgroups(Arrays.asList("user"));
         userN.setEmail(email);
         // System.out.println(userN);
         instance.realm(realm).users().create(userN);
@@ -101,8 +101,8 @@ public class UserService {
         return "Usuario " + username + " Creado";
     }
 
-    public String updateUser(String id, String username, String lastname, String firstname, String email, String pass,
-            String realm, String role, Boolean enable) {
+    public String updateUser(String id, String username, String lastName, String firstName, String email, String pass,
+            String realm, String group, Boolean enabled) {
         Keycloak instance = instance();
         UserResource userUp = instance.realm("SpringBoot").users().get(id);
         UserRepresentation userRep = userUp.toRepresentation();
@@ -111,11 +111,12 @@ public class UserService {
         credential.setValue(pass);
         credential.setTemporary(true);
         userRep.setUsername(username);
-        userRep.setFirstName(firstname);
-        userRep.setLastName(lastname);
+        userRep.setFirstName(firstName);
+        userRep.setLastName(lastName);
         userRep.setCredentials(Arrays.asList(credential));
-        userRep.setEnabled(enable);
+        userRep.setEnabled(enabled);
         userRep.setEmail(email);
+        userRep.setGroups(Arrays.asList(group));
         userUp.update(userRep);
 
         return "Usuario " + username + " Actualizado";

@@ -11,40 +11,40 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String username;
-    private String lastname;
-    private String firstname;
+    private String lastName;
+    private String firstName;
     private String email;
     private String password;
     private String realm;
-    private String role;
-    private Boolean enable;
+    private String group;
+    private Boolean enabled;
 
     public User() {
     }
 
-    public User(Long id, String username, String lastname, String firstname, String email, String password,
-            String realm, String role, Boolean enable) {
+    public User(Long id, String username, String lastName, String firstName, String email, String password,
+            String realm, String group, Boolean enabled) {
         this.id = id;
         this.username = username;
-        this.lastname = lastname;
-        this.firstname = firstname;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.email = email;
         this.password = password;
         this.realm = realm;
-        this.role = role;
-        this.enable = enable;
+        this.group = group;
+        this.enabled = enabled;
     }
 
-    public User(String username, String lastname, String firstname, String email, String password, String realm,
-            String role, Boolean enable) {
+    public User(String username, String lastName, String firstName, String email, String password, String realm,
+            String group, Boolean enabled) {
         this.username = username;
-        this.lastname = lastname;
-        this.firstname = firstname;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.email = email;
         this.password = password;
         this.realm = realm;
-        this.role = role;
-        this.enable = enable;
+        this.group = group;
+        this.enabled = enabled;
     }
 
     public long getId() {
@@ -63,20 +63,20 @@ public class User {
         this.username = username;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstName(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getEmail() {
@@ -103,27 +103,27 @@ public class User {
         this.realm = realm;
     }
 
-    public String getRole() {
-        return role;
+    public String getGroup() {
+        return group;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setGroup(String group) {
+        this.group = group;
     }
 
-    public Boolean getEnable() {
-        return enable;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setEnable(Boolean enable) {
-        this.enable = enable;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username='" + username + '\'' + ", lastname='" + lastname + '\''
-                + ", firstname='" + firstname + '\'' + ", email=" + email + '\'' + ", password=" + password + '\''
-                + ", realm=" + realm + '\'' + ", role=" + role + '\'' + ", enable=" + enable + '\'' + '}';
+        return "User{" + "id=" + id + ", username='" + username + '\'' + ", lastName='" + lastName + '\''
+                + ", firstName='" + firstName + '\'' + ", email=" + email + '\'' + ", password=" + password + '\''
+                + ", realm=" + realm + '\'' + ", group=" + group + '\'' + ", enabled=" + enabled + '\'' + '}';
     }
 
 }
