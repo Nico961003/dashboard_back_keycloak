@@ -49,8 +49,9 @@ public class RoleController {
     ResponseEntity<String> createRole(@RequestBody Role role, @RequestHeader String Authorization) {
         String messagC = "";
         String roleName = role.getName();
+        String description = role.getDescription();
         try {
-            roleService.createRole(roleName);
+            roleService.createRole(roleName, description);
             messagC = "Rol " + roleName + " Creado";
         } catch (Exception ecr) {
             System.out.println(ecr);

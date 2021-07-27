@@ -45,10 +45,11 @@ public class RoleService {
         return instanceU;
     }
 
-    public void createRole(String roleName) {
+    public void createRole(String roleName, String description) {
         Keycloak instance = instance();
         RoleRepresentation roleR = new RoleRepresentation();
         roleR.setName(roleName);
+        roleR.setDescription(description);
         instance.realm("SpringBoot").roles().create(roleR);
     }
 

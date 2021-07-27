@@ -14,24 +14,27 @@ public class Role {
     private String name;
     private Boolean clientRole;
     private String realm;
+    private String description;
 
     public Role() {
 
     }
 
-    public Role(long id, String identifier, String name, Boolean clientRole, String realm) {
+    public Role(long id, String identifier, String name, Boolean clientRole, String realm, String description) {
         this.id = id;
         this.identifier = identifier;
         this.name = name;
         this.clientRole = clientRole;
         this.realm = realm;
+        this.description = description;
     }
 
-    public Role(String identifier, String name, Boolean clientRole, String realm) {
+    public Role(String identifier, String name, Boolean clientRole, String realm, String description) {
         this.identifier = identifier;
         this.name = name;
         this.clientRole = clientRole;
         this.realm = realm;
+        this.description = description;
     }
 
     public String getRealm() {
@@ -74,10 +77,18 @@ public class Role {
         this.clientRole = clientRole;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "Role [clientRole=" + clientRole + ", id=" + id + ", identifier=" + identifier + ", name=" + name
-                + ", realm=" + realm + "]";
+                + ", realm=" + realm + ", description=" + description + "]";
     }
 
 }
