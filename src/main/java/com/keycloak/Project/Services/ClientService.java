@@ -100,18 +100,15 @@ public class ClientService {
     }
 
     public String updateClient(String name, String rootUrl, String adminUrl, String realm, Boolean enabled,
-            String description) {
+            String description, String nameC) {
 
         String updateC = "";
         Keycloak instance = instance();
         try {
             ClientRepresentation cliente = instance.realm("SpringBoot").clients().findByClientId(name).get(0);
-            // cliente.setBearerOnly(false);
-            // cliente.setPublicClient(false);
-            // cliente.setProtocol("openid-connect");
-            // List<String> redirectUris = new ArrayList<String>();
-            // redirectUris.add(adminUrl);
-            // cliente.setRedirectUris(redirectUris);
+
+            cliente.setName(nameC);
+            // cliente.setId(nameC);
             cliente.setBearerOnly(false);
             cliente.setPublicClient(false);
             // cliente.setSecret("******");
@@ -129,7 +126,7 @@ public class ClientService {
             // cliente.setBaseUrl("");
             instance.realm(realm).clients().get(name).update(cliente);
 
-            updateC = "Se actualizo el cliente " + name;
+            updateC = "Se actualizo el cliente " + nameC;
         } catch (Exception eup) {
             System.out.println(eup);
             updateC = "No se actualizo cliente";

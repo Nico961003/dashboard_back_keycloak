@@ -99,7 +99,7 @@ public class ClientController {
     @PutMapping("/updateClient/{name}")
     void updateClient(@RequestBody Client client, @RequestHeader String Authorization, @PathVariable String name) {
         String updateC = "";
-        // String name = client.getName();
+        String nameC = client.getName();
         String rootUrl = client.getRootUrl();
         String adminUrl = client.getAdminUrl();
         String realm = client.getRealm();
@@ -107,11 +107,11 @@ public class ClientController {
         String description = client.getDescription();
 
         try {
-            updateC = clientService.updateClient(name, rootUrl, adminUrl, realm, enabled, description);
+            updateC = clientService.updateClient(name, rootUrl, adminUrl, realm, enabled, description, nameC);
 
         } catch (Exception exup) {
             System.out.println(exup);
-            updateC = "No se actualizo cliente";
+            updateC = "No se actualizo cliente" + nameC;
         }
         System.out.println(updateC);
     }
