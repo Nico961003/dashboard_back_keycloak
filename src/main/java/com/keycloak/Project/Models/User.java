@@ -122,8 +122,8 @@ public class User {
     @Override
     public String toString() {
         return "User{" + "id=" + id + ", username='" + username + '\'' + ", lastName='" + lastName + '\''
-                + ", firstName='" + firstName + '\'' + ", email=" + email + '\'' + ", password=" + password + '\''
-                + ", realm=" + realm + '\'' + ", group=" + group + '\'' + ", enabled=" + enabled + '\'' + '}';
+                + ", firstName='" + firstName + '\'' + ", email='" + email + '\'' + ", password='" + password + '\''
+                + ", realm='" + realm + '\'' + ", group='" + group + '\'' + ", enabled='" + enabled + '\'' + '}';
     }
 
 }

@@ -80,7 +80,7 @@ public class UserService {
         // realmResource.groups().get(group).toRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(pass);
-        credential.setTemporary(true);
+        credential.setTemporary(false);
         UserRepresentation userN = new UserRepresentation();
         userN.setUsername(username);
         userN.setFirstName(firstName);
