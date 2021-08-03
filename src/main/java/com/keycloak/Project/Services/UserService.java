@@ -104,12 +104,12 @@ public class UserService {
     public String updateUser(String id, String username, String lastName, String firstName, String email, String pass,
             String realm, String group, Boolean enabled) {
         Keycloak instance = instance();
-        UserResource userUp = instance.realm("SpringBoot").users().get(id);
+        UserResource userUp = instance.realm(realm).users().get(id);
         UserRepresentation userRep = userUp.toRepresentation();
         CredentialRepresentation credential = new CredentialRepresentation();
         credential.setType(CredentialRepresentation.PASSWORD);
         credential.setValue(pass);
-        credential.setTemporary(true);
+        credential.setTemporary(false);
         userRep.setUsername(username);
         userRep.setFirstName(firstName);
         userRep.setLastName(lastName);

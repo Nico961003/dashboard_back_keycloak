@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.security.RolesAllowed;
 
+import java.io.IOException;
 import java.security.Principal;
+
+import org.apache.http.client.ClientProtocolException;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.IDToken;
@@ -39,34 +42,48 @@ import com.keycloak.Project.Services.GroupService;
 @RequestMapping("/group")
 public class GroupController {
 
+    @Autowired
+    private GroupRepository repository;
+
+    @Autowired
+    GroupService groupService;
+
     @GetMapping("/groups")
-    List<GroupRepresentation> groups() {
-        Keycloak instance = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+    List<GroupRepresentation> groups(@RequestHeader String Authorization) {
+        String realm = "SpringBoot";
         List<GroupRepresentation> grupos = new ArrayList<GroupRepresentation>();
         try {
-            grupos = instance.realm("SpringBoot").groups().groups();
-        } catch (Exception eg) {
-            System.out.println(eg);
+            grupos = groupService.groups(realm);
+        } catch (Exception ecg) {
+            System.out.println(ecg);
         }
-
         return grupos;
     }
 
     @PostMapping("/createGroup")
     @ResponseStatus(HttpStatus.CREATED)
-    void createGroup(@RequestBody Group group) {
+    void createGroup(@RequestBody Group group, @RequestHeader String Authorization) {
         System.out.println("GROUP: " + group);
-        Keycloak instance = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
-        GroupRepresentation groupR = new GroupRepresentation();
+        try {
+            groupService.createGroup(group);
+            System.out.println("Grupo " + group.getName() + " creado.");
+        } catch (Exception ecg) {
+            System.out.println("No se creo grupo\n" + ecg);
+        }
 
-        // group.setId(id);
-        groupR.setName(group.getName());
-        groupR.setPath(group.getPath());
-        groupR.setRealmRoles(group.getRolesR());
-        instance.realm("SpringBoot").groups().add(groupR);
+    }
 
+    @GetMapping("/group/{name}")
+    GroupRepresentation group(@PathVariable String name, @RequestHeader String Authorization) {
+        GroupRepresentation grupo = new GroupRepresentation();
+        String realm = "SpringBoot";
+        try {
+            grupo = groupService.groupR(name, realm);
+        } catch (Exception eg) {
+            System.out.println(eg);
+        }
+
+        return grupo;
     }
 
 }

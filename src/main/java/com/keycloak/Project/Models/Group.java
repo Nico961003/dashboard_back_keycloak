@@ -14,29 +14,34 @@ public class Group {
     private Long id;
     private String name;
     private String path;
+    private String realm;
+    private String idRole;
+    private String nameRole;
 
-    @ElementCollection
-    private List<String> rolesC;
+    // @ElementCollection
+    // private List<String> rolesC;
 
-    @ElementCollection
-    private List<String> rolesR;
+    // @ElementCollection
+    // private List<String> rolesR;
 
     public Group() {
     }
 
-    public Group(Long id, String name, String path, List<String> rolesC, List<String> rolesR) {
+    public Group(Long id, String name, String path, String realm, String idRole, String nameRole) {
         this.id = id;
         this.name = name;
         this.path = path;
-        this.rolesC = rolesC;
-        this.rolesR = rolesR;
+        this.realm = realm;
+        this.idRole = idRole;
+        this.nameRole = nameRole;
     }
 
-    public Group(String name, String path, List<String> rolesC, List<String> rolesR) {
+    public Group(String name, String path, String realm, String idRole, String nameRole) {
         this.name = name;
         this.path = path;
-        this.rolesC = rolesC;
-        this.rolesR = rolesR;
+        this.realm = realm;
+        this.idRole = idRole;
+        this.nameRole = nameRole;
     }
 
     public Long getId() {
@@ -63,26 +68,57 @@ public class Group {
         this.path = path;
     }
 
-    public List<String> getRolesC() {
-        return rolesC;
+    public String getRealm() {
+        return realm;
     }
 
-    public void setRolesC(List<String> rolesC) {
-        this.rolesC = rolesC;
+    public void setRealm(String realm) {
+        this.realm = realm;
     }
 
-    public List<String> getRolesR() {
-        return rolesR;
+    public String getIdRole() {
+        return idRole;
     }
 
-    public void setRolesR(List<String> rolesR) {
-        this.rolesR = rolesR;
+    public void setIdRole(String idRole) {
+        this.idRole = idRole;
+    }
+
+    public String getNameRole() {
+        return nameRole;
+    }
+
+    public void setNameRole(String nameRole) {
+        this.nameRole = nameRole;
     }
 
     @Override
     public String toString() {
-        return "Group [id=" + id + ", name=" + name + ", path=" + path + ", rolesC=" + rolesC + ", rolesR=" + rolesR
-                + "]";
+        return "Group [id=" + id + ", idRole=" + idRole + ", name=" + name + ", nameRole=" + nameRole + ", path=" + path
+                + ", realm=" + realm + "]";
     }
+
+    // public List<String> getRolesC() {
+    // return rolesC;
+    // }
+
+    // public void setRolesC(List<String> rolesC) {
+    // this.rolesC = rolesC;
+    // }
+
+    // public List<String> getRolesR() {
+    // return rolesR;
+    // }
+
+    // public void setRolesR(List<String> rolesR) {
+    // this.rolesR = rolesR;
+    // }
+
+    // @Override
+    // public String toString() {
+    // return "Group [id=" + id + ", name=" + name + ", path=" + path + ", rolesC="
+    // + rolesC + ", rolesR=" + rolesR
+    // + "]";
+    // }
 
 }
