@@ -1,9 +1,14 @@
 package com.keycloak.Project.Models;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.ElementCollection;
 
 @Entity
 public class Role {
@@ -15,26 +20,38 @@ public class Role {
     private Boolean clientRole;
     private String realm;
     private String description;
+    private String idClient;
+
+    @ElementCollection(targetClass = String.class)
+    // @OneToMany(targetEntity=Student.class, mappedBy="college",
+    // fetch=FetchType.EAGER)
+    private Map<String, List<String>> attributes;
 
     public Role() {
 
     }
 
-    public Role(long id, String identifier, String name, Boolean clientRole, String realm, String description) {
+    public Role(long id, String identifier, String name, Boolean clientRole, String realm, String description,
+            String idClient, Map<String, List<String>> attributes) {
         this.id = id;
         this.identifier = identifier;
         this.name = name;
         this.clientRole = clientRole;
         this.realm = realm;
         this.description = description;
+        this.idClient = idClient;
+        this.attributes = attributes;
     }
 
-    public Role(String identifier, String name, Boolean clientRole, String realm, String description) {
+    public Role(String identifier, String name, Boolean clientRole, String realm, String description, String idClient,
+            Map<String, List<String>> attributes) {
         this.identifier = identifier;
         this.name = name;
         this.clientRole = clientRole;
         this.realm = realm;
         this.description = description;
+        this.idClient = idClient;
+        this.attributes = attributes;
     }
 
     public String getRealm() {
@@ -85,10 +102,27 @@ public class Role {
         this.description = description;
     }
 
+    public String getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(String idClient) {
+        this.idClient = idClient;
+    }
+
+    public Map<String, List<String>> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(Map<String, List<String>> attributes) {
+        this.attributes = attributes;
+    }
+
     @Override
     public String toString() {
-        return "Role [clientRole=" + clientRole + ", id=" + id + ", identifier=" + identifier + ", name=" + name
-                + ", realm=" + realm + ", description=" + description + "]";
+        return "Role [attributes=" + attributes + ", clientRole=" + clientRole + ", description=" + description
+                + ", id=" + id + ", idClient=" + idClient + ", identifier=" + identifier + ", name=" + name + ", realm="
+                + realm + "]";
     }
 
 }

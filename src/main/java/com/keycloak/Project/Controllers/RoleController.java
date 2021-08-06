@@ -50,8 +50,12 @@ public class RoleController {
         String messagC = "";
         String roleName = role.getName();
         String description = role.getDescription();
+        String realm = role.getRealm();
+        String idClient = role.getIdClient();
+        Map<String, List<String>> attributes = role.getAttributes();
+        System.out.println(role);
         try {
-            roleService.createRole(roleName, description);
+            roleService.createRole(roleName, description, realm, idClient, attributes);
             messagC = "Rol " + roleName + " Creado";
         } catch (Exception ecr) {
             System.out.println(ecr);

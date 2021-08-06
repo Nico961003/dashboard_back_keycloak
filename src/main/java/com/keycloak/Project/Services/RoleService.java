@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.keycloak.adapters.springsecurity.client.*;
 //import org.keycloak.keycloak-admin-client.*
@@ -28,6 +30,7 @@ import org.keycloak.representations.idm.*;
 import org.keycloak.protocol.oidc.*;
 import org.keycloak.admin.client.token.*;
 import org.keycloak.admin.client.token.TokenManager;
+import org.keycloak.admin.client.resource.RoleResource;
 //import org.keycloak.representations.idm.UserRepresentation
 import org.keycloak.admin.client.resource.UserResource;
 
@@ -45,12 +48,33 @@ public class RoleService {
         return instanceU;
     }
 
-    public void createRole(String roleName, String description) {
+    public void createRole(String roleName, String description, String realm, String idClient,
+            Map<String, List<String>> attributes) {
         Keycloak instance = instance();
         RoleRepresentation roleR = new RoleRepresentation();
         roleR.setName(roleName);
         roleR.setDescription(description);
-        instance.realm("SpringBoot").roles().create(roleR);
+        roleR.setClientRole(true);
+        // roleR.singleAttribute("consultSales", "false");
+        // Map<String, List<String>> attributes = new HashMap<>();
+        // attributes.put("consultPays", Collections.singletonList("true"));
+        // attributes.put("consultSales", Collections.singletonList("false"));
+        System.out.println("ATRIBUTOS: " + attributes);
+
+        roleR.setAttributes(attributes);
+        // String clientId = "ClienteSmartCentral";
+        ClientRepresentation clientRepresentation = new ClientRepresentation();
+        try {
+            clientRepresentation = instance.realm(realm).clients().findByClientId(idClient).get(0);
+            System.out.println("cliente con id de: " + clientRepresentation.getId());
+            instance.realm(realm).clients().get(clientRepresentation.getId()).roles().create(roleR);
+            RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
+            roleResource.update(roleR);
+        } catch (Exception exr) {
+            System.out.println("No se asigno rol \n" + exr);
+        }
+
+        // instance.realm("SpringBoot").roles().create(roleR);
     }
 
     public List<RoleRepresentation> rolesC() {
