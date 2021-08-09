@@ -153,6 +153,29 @@ public class RoleService {
 
     }
 
+    public RoleRepresentation roleCliente(String idClient, String roleName) {
+        Keycloak instance = instance();
+        String realm = "SpringBoot";
+        // String idClient = "ClienteSmartCentral";
+        RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
+        RoleRepresentation roleR = roleResource.toRepresentation();
+        System.out.println("ROLE: \n" + roleR);
+        return roleR;
+
+    }
+
+    public List<RoleRepresentation> rolesClientes(String idClient) {
+        Keycloak instance = instance();
+        String realm = "SpringBoot";
+        // String idClient = "ClienteSmartCentral";
+        // RoleResource roleResource =
+        // instance.realm(realm).clients().get(idClient).roles().list();
+        List<RoleRepresentation> rolesR = instance.realm(realm).clients().get(idClient).roles().list(); // roleResource.toRepresentation();
+        System.out.println("ROLEs: \n" + rolesR);
+        return rolesR;
+
+    }
+
     public void deleteR(String roleName) {
         Keycloak instance = instance();
         instance.realm("SpringBoot").roles().get(roleName).remove();

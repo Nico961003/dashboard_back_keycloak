@@ -79,20 +79,55 @@ public class RoleController {
         return lsRoles;
     }
 
+    // @GetMapping("/rolesC/{idClient}")
+    // public List<Map<String, String>> rolesCli(@RequestHeader String
+    // Authorization, @PathVariable String idClient) {
+
+    // // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
+    // // instance.realm("SpringBoot").roles().list();
+    // // JSONArray jsonArr = new JSONArray();
+    // List<Map<String, String>> jsonArr = new ArrayList<Map<String, String>>();
+    // try {
+    // jsonArr = roleService.rolesCli(idClient);
+    // } catch (Exception els) {
+    // System.out.println(els);
+    // }
+    // // System.out.println("JSONArray: " + jsonArr + "\nXD");
+    // return jsonArr;
+    // }
+
     @GetMapping("/rolesC/{idClient}")
-    public List<Map<String, String>> rolesCli(@RequestHeader String Authorization, @PathVariable String idClient) {
+    public List<RoleRepresentation> rolesCli(@PathVariable String idClient, @RequestHeader String Authorization) {
 
         // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
         // instance.realm("SpringBoot").roles().list();
         // JSONArray jsonArr = new JSONArray();
-        List<Map<String, String>> jsonArr = new ArrayList<Map<String, String>>();
+        List<RoleRepresentation> rolesC = new ArrayList<RoleRepresentation>();
         try {
-            jsonArr = roleService.rolesCli(idClient);
+            rolesC = roleService.rolesClientes(idClient);
         } catch (Exception els) {
             System.out.println(els);
         }
         // System.out.println("JSONArray: " + jsonArr + "\nXD");
-        return jsonArr;
+        return rolesC;
+    }
+
+    @GetMapping("/rolesC/{idClient}/{roleName}")
+    public RoleRepresentation rolesCliente(@PathVariable String idClient, @PathVariable String roleName,
+            @RequestHeader String Authorization) {
+
+        // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
+        // instance.realm("SpringBoot").roles().list();
+        // JSONArray jsonArr = new JSONArray();
+        // List<Map<String, String>> jsonArr = new ArrayList<Map<String, String>>();
+        RoleRepresentation roleR = new RoleRepresentation();
+        try {
+            roleR = roleService.roleCliente(idClient, roleName);
+        } catch (Exception els) {
+            System.out.println(els);
+        }
+        // System.out.println("JSONArray: " + jsonArr + "\nXD");
+        return roleR;
     }
 
     @GetMapping("/role/{roleName}")
