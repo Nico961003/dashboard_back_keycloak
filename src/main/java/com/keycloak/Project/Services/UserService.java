@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+
 import org.keycloak.adapters.springsecurity.client.*;
 import java.util.ArrayList;
 //import org.keycloak.keycloak-admin-client.*
@@ -29,6 +31,13 @@ import org.keycloak.admin.client.resource.UserResource;
 import org.springframework.stereotype.Component;
 import org.keycloak.models.AdminRoles;
 // import org.keycloak.models.Constants;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 
 @Component
 public class UserService {
@@ -87,7 +96,8 @@ public class UserService {
         userN.setLastName(lastName);
         userN.setCredentials(Arrays.asList(credential));
         userN.setEnabled(enabled);
-        userN.setGroups(Arrays.asList(group));
+        // userN.setId(group);
+        // userN.setGroups(Arrays.asList(group));
         // userN.setClientgroups(Collections.singletonMap(Constants.REALM_MANAGEMENT_CLIENT_ID,
         // Collections.singletonList(Admingroups.MANAGE_CLIENTS)));
         // List<String> groupls = new ArrayList<String>();
@@ -96,7 +106,39 @@ public class UserService {
         // userN.setRealmgroups(Arrays.asList("user"));
         userN.setEmail(email);
         // System.out.println(userN);
+
+        // Map<String, List<String>> clientRoles = new HashMap<>();
+        // clientRoles.put("ClienteSmartCentral",
+        // Collections.singletonList("role_userB2"));
+        // userN.setClientRoles(clientRoles);
         instance.realm(realm).users().create(userN);
+
+        UserRepresentation userU = instance.realm(realm).users().search(username).get(0);
+        System.out.println("ID user: " + userU.getId());
+        // instance.realm(realm).users().get(userU.getId()).update(userN);
+        String idCliente = "ClienteSmartCentral";
+        String idRoleC = "04c8d43c-894e-45d4-838c-d342166fd0d6";
+        String nameR = "role_despachador";
+
+        TokenManager tokenmanager = instance.tokenManager();
+        String token = "Bearer\n" + tokenmanager.getAccessTokenString();
+        String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + userU.getId()
+                + "/role-mappings/clients/" + idCliente;
+        String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
+                + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
+
+        StringEntity entity = new StringEntity(jsonInput, ContentType.APPLICATION_JSON);
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost request = new HttpPost(link);
+        request.addHeader("Authorization", token);
+        request.setEntity(entity);
+
+        try {
+            HttpResponse response = httpClient.execute(request);
+            System.out.println("RESPONSE: " + response);
+        } catch (Exception exh) {
+            System.out.println(exh);
+        }
 
         return "Usuario " + username + " Creado";
     }

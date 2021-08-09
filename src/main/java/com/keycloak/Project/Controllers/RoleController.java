@@ -31,6 +31,8 @@ import org.keycloak.admin.client.token.TokenManager;
 //import org.keycloak.representations.idm.UserRepresentation
 import org.keycloak.admin.client.resource.UserResource;
 
+import org.json.JSONArray;
+
 import com.keycloak.Project.Models.Role;
 import com.keycloak.Project.Services.RoleService;
 import com.keycloak.Project.Repository.RoleRepository;
@@ -75,6 +77,22 @@ public class RoleController {
             System.out.println(els);
         }
         return lsRoles;
+    }
+
+    @GetMapping("/rolesC")
+    public List<Map<String, String>> rolesCli() {
+
+        // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
+        // instance.realm("SpringBoot").roles().list();
+        // JSONArray jsonArr = new JSONArray();
+        List<Map<String, String>> jsonArr = new ArrayList<Map<String, String>>();
+        try {
+            jsonArr = roleService.rolesCli();
+        } catch (Exception els) {
+            System.out.println(els);
+        }
+        System.out.println("JSONArray: " + jsonArr + "\nXD");
+        return jsonArr;
     }
 
     @GetMapping("/role/{roleName}")

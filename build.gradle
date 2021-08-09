@@ -58,6 +58,7 @@ dependencies {
 	implementation group: 'org.springframework.security', name: 'spring-security-core', version: '5.5.1'
 
 	compileOnly group: 'org.json', name: 'json', version: '20201115'
+	implementation group: 'org.json', name: 'json', version: '20210307'
 }
 
 test {

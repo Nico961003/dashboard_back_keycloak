@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.security.RolesAllowed;
 
+import java.io.InputStream;
 import java.security.Principal;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
@@ -38,6 +39,16 @@ import com.keycloak.Project.Models.Role;
 // import com.keycloak.Project.Services.RoleService;
 import com.keycloak.Project.Repository.RoleRepository;
 import org.springframework.stereotype.Component;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 
 @Component
 public class RoleService {
@@ -81,6 +92,60 @@ public class RoleService {
         Keycloak instance = instance();
         List<RoleRepresentation> lsRoles = instance.realm("SpringBoot").roles().list();
         return lsRoles;
+    }
+
+    public List<Map<String, String>> rolesCli() {
+        Keycloak instance = instance();
+        String idCliente = "ClienteSmartCentral";
+        String idRoleC = "04c8d43c-894e-45d4-838c-d342166fd0d6";
+        String realm = "SpringBoot";
+        String nameR = "role_despachador";
+        String idUser = "3cc1542f-7cce-4cdc-93c3-3defe039dc94";
+        String json = "";
+        TokenManager tokenmanager = instance.tokenManager();
+        String token = "Bearer\n" + tokenmanager.getAccessTokenString();
+        String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + idUser
+                + "/role-mappings/clients/" + idCliente + "/available";
+
+        // String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\""
+        // + nameR
+        // + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
+
+        // StringEntity entity = new StringEntity(jsonInput,
+        // ContentType.APPLICATION_JSON);
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpGet request = new HttpGet(link);
+        request.addHeader("Authorization", token);
+        // request.setEntity(entity);
+        JSONArray jsonArrPru = new JSONArray();
+        List<Map<String, String>> rolesLS = new ArrayList<Map<String, String>>();
+
+        try {
+            HttpResponse response = httpClient.execute(request);
+            InputStream inputStream = response.getEntity().getContent();
+            // println inputStream
+            System.out.println("RESPONSE: " + response);
+            json = IOUtils.toString(inputStream, "UTF-8");
+            // jsonTotal=json
+            jsonArrPru = new JSONArray(json);
+            for (int i = 0; i < jsonArrPru.length(); i++) {
+                Map<String, String> dats = new HashMap<String, String>();
+                String cad1 = jsonArrPru.getJSONObject(i).getString("name");
+                String cad2 = jsonArrPru.getJSONObject(i).getString("description");
+                String cad3 = jsonArrPru.getJSONObject(i).getString("id");
+                String cad4 = jsonArrPru.getJSONObject(i).getString("containerId");
+                System.out.println(cad1 + " " + cad2 + " " + cad3 + " " + cad4);
+                dats.put("id", cad3);
+                dats.put("name", cad1);
+                dats.put("description", cad2);
+                dats.put("containerId", cad4);
+                rolesLS.add(dats);
+            }
+            // System.out.println("JSON: " + jsonArrPru);
+        } catch (Exception exh) {
+            System.out.println(exh);
+        }
+        return rolesLS;
     }
 
     public RoleRepresentation roleC(String roleName) {
