@@ -80,7 +80,7 @@ public class RoleController {
     }
 
     @GetMapping("/rolesC")
-    public List<Map<String, String>> rolesCli() {
+    public List<Map<String, String>> rolesCli(@RequestHeader String Authorization) {
 
         // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
         // instance.realm("SpringBoot").roles().list();
