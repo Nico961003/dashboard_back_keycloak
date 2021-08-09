@@ -5,6 +5,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.ElementCollection;
+
 @Entity
 public class User {
     @Id
@@ -19,11 +24,20 @@ public class User {
     private String group;
     private Boolean enabled;
 
+    // private String idClient;
+    // private String idRole;
+    // private String nameRole;
+
+    @ElementCollection(targetClass = String.class)
+    // @OneToMany(targetEntity=Student.class, mappedBy="college",
+    // fetch=FetchType.EAGER)
+    private List<Map<String, String>> rolesClient;
+
     public User() {
     }
 
-    public User(Long id, String username, String lastName, String firstName, String email, String password,
-            String realm, String group, Boolean enabled) {
+    public User(long id, String username, String lastName, String firstName, String email, String password,
+            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient) {
         this.id = id;
         this.username = username;
         this.lastName = lastName;
@@ -33,10 +47,11 @@ public class User {
         this.realm = realm;
         this.group = group;
         this.enabled = enabled;
+        this.rolesClient = rolesClient;
     }
 
     public User(String username, String lastName, String firstName, String email, String password, String realm,
-            String group, Boolean enabled) {
+            String group, Boolean enabled, List<Map<String, String>> rolesClient) {
         this.username = username;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -45,6 +60,7 @@ public class User {
         this.realm = realm;
         this.group = group;
         this.enabled = enabled;
+        this.rolesClient = rolesClient;
     }
 
     public long getId() {
@@ -119,11 +135,43 @@ public class User {
         this.enabled = enabled;
     }
 
+    public List<Map<String, String>> getRolesClient() {
+        return rolesClient;
+    }
+
+    public void setRolesClient(List<Map<String, String>> rolesClient) {
+        this.rolesClient = rolesClient;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", username='" + username + '\'' + ", lastName='" + lastName + '\''
-                + ", firstName='" + firstName + '\'' + ", email='" + email + '\'' + ", password='" + password + '\''
-                + ", realm='" + realm + '\'' + ", group='" + group + '\'' + ", enabled='" + enabled + '\'' + '}';
+        return "User [email=" + email + ", enabled=" + enabled + ", firstName=" + firstName + ", group=" + group
+                + ", lastName=" + lastName + ", password=" + password + ", realm=" + realm + ", rolesClient="
+                + rolesClient + ", username=" + username + "]";
     }
+
+    // public String getIdClient() {
+    // return idClient;
+    // }
+
+    // public void setIdClient(String idClient) {
+    // this.idClient = idClient;
+    // }
+
+    // public String getIdRole() {
+    // return idRole;
+    // }
+
+    // public void setIdRole(String idRole) {
+    // this.idRole = idRole;
+    // }
+
+    // public String getNameRole() {
+    // return nameRole;
+    // }
+
+    // public void setNameRole(String nameRole) {
+    // this.nameRole = nameRole;
+    // }
 
 }

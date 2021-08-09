@@ -114,30 +114,43 @@ public class UserService {
         instance.realm(realm).users().create(userN);
 
         UserRepresentation userU = instance.realm(realm).users().search(username).get(0);
-        System.out.println("ID user: " + userU.getId());
+        // System.out.println("ID user: " + userU.getId());
         // instance.realm(realm).users().get(userU.getId()).update(userN);
-        String idCliente = "ClienteSmartCentral";
-        String idRoleC = "04c8d43c-894e-45d4-838c-d342166fd0d6";
-        String nameR = "role_despachador";
-
+        //////////////// put validation if idClient is null
         TokenManager tokenmanager = instance.tokenManager();
         String token = "Bearer\n" + tokenmanager.getAccessTokenString();
-        String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + userU.getId()
-                + "/role-mappings/clients/" + idCliente;
-        String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
-                + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
+        List<Map<String, String>> rolesU = new ArrayList<Map<String, String>>();
+        rolesU = user.getRolesClient();
+        for (int k = 0; k < rolesU.size(); k++) {
+            Map<String, String> rolesCli = new HashMap<String, String>();
+            rolesCli = rolesU.get(k);
+            String idCliente = rolesCli.get("idClient");// user.getIdClient();// "ClienteSmartCentral";
+            String idRoleC = rolesCli.get("idRole");// user.getIdRole();// "04c8d43c-894e-45d4-838c-d342166fd0d6";
+            String nameR = rolesCli.get("nameRole");// user.getNameRole();// "role_despachador";
+            // System.out.println("ROLES => \n" + rolesU);
+            // System.out.println("ROLE => \n" + rolesU.get(0));
 
-        StringEntity entity = new StringEntity(jsonInput, ContentType.APPLICATION_JSON);
-        HttpClient httpClient = HttpClientBuilder.create().build();
-        HttpPost request = new HttpPost(link);
-        request.addHeader("Authorization", token);
-        request.setEntity(entity);
+            // System.out.println("idCliente => " + rolesCli.get("idClient"));
+            // System.out.println("idRole => " + rolesCli.get("idRole"));
+            // System.out.println("nameRole => " + rolesCli.get("nameRole"));
 
-        try {
-            HttpResponse response = httpClient.execute(request);
-            System.out.println("RESPONSE: " + response);
-        } catch (Exception exh) {
-            System.out.println(exh);
+            String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + userU.getId()
+                    + "/role-mappings/clients/" + idCliente;
+            String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
+                    + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
+
+            StringEntity entity = new StringEntity(jsonInput, ContentType.APPLICATION_JSON);
+            HttpClient httpClient = HttpClientBuilder.create().build();
+            HttpPost request = new HttpPost(link);
+            request.addHeader("Authorization", token);
+            request.setEntity(entity);
+
+            try {
+                HttpResponse response = httpClient.execute(request);
+                // System.out.println("RESPONSE: " + response);
+            } catch (Exception exh) {
+                System.out.println(exh);
+            }
         }
 
         return "Usuario " + username + " Creado";
