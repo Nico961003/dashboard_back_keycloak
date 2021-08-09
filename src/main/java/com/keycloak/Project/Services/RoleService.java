@@ -94,12 +94,10 @@ public class RoleService {
         return lsRoles;
     }
 
-    public List<Map<String, String>> rolesCli() {
+    public List<Map<String, String>> rolesCli(String idClient) {
         Keycloak instance = instance();
-        String idCliente = "ClienteSmartCentral";
-        String idRoleC = "04c8d43c-894e-45d4-838c-d342166fd0d6";
+        String idCliente = idClient;// "ClienteSmartCentral";
         String realm = "SpringBoot";
-        String nameR = "role_despachador";
         String idUser = "3cc1542f-7cce-4cdc-93c3-3defe039dc94";
         String json = "";
         TokenManager tokenmanager = instance.tokenManager();
