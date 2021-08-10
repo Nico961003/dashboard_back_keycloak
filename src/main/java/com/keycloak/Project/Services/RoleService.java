@@ -172,7 +172,20 @@ public class RoleService {
         // instance.realm(realm).clients().get(idClient).roles().list();
         List<RoleRepresentation> rolesR = instance.realm(realm).clients().get(idClient).roles().list(); // roleResource.toRepresentation();
         System.out.println("ROLEs: \n" + rolesR);
+
+        // instance.realm(realm).clients().get(idClient).roles().deleteRole(roleName);//delete
+        // role
+        // RoleResource roleResource =
+        // instance.realm(realm).clients().get(idClient).roles().get(roleName);
+        // roleResource.update(roleR);//update role
         return rolesR;
+
+    }
+
+    public void deleteRC(String idClient, String roleName) {
+        Keycloak instance = instance();
+        String realm = "SpringBoot";
+        instance.realm(realm).clients().get(idClient).roles().deleteRole(roleName);
 
     }
 
@@ -180,6 +193,23 @@ public class RoleService {
         Keycloak instance = instance();
         instance.realm("SpringBoot").roles().get(roleName).remove();
 
+    }
+
+    public void updateRoleC(String roleName, String description, String idClient,
+            Map<String, List<String>> attributes) {
+        Keycloak instance = instance();
+        String realm = "SpringBoot";
+        RoleRepresentation roleR = new RoleRepresentation();
+        roleR.setDescription(description);
+        roleR.setClientRole(true);
+        roleR.setAttributes(attributes);
+        roleR.setName(roleName);
+        try {
+            RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
+            roleResource.update(roleR);// update role
+        } catch (Exception exup) {
+            System.out.println("No se actualizo: " + exup);
+        }
     }
 
 }

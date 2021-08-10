@@ -67,6 +67,26 @@ public class RoleController {
 
     }
 
+    @PutMapping("/rolesC/updateRoleC/{idClient}/{roleName}")
+    ResponseEntity<String> updateRole(@RequestBody Role role, @PathVariable String idClient,
+            @PathVariable String roleName) {// , @RequestHeader String Authorization) {
+        String messagC = "";
+        // String roleName = role.getName();
+        String description = role.getDescription();
+        String realm = role.getRealm();
+        // String idClient = role.getIdClient();
+        Map<String, List<String>> attributes = role.getAttributes();
+        System.out.println(role);
+        try {
+            roleService.updateRoleC(roleName, description, idClient, attributes);
+            messagC = "Rol " + roleName + " actualizado";
+        } catch (Exception ecr) {
+            System.out.println(ecr);
+            messagC = "Rol " + roleName + " no actualizado\n" + ecr;
+        }
+        return ResponseEntity.ok(messagC);
+    }
+
     @GetMapping("/roles")
     public List<RoleRepresentation> rolesC(@RequestHeader String Authorization) {
 
@@ -141,17 +161,29 @@ public class RoleController {
         return roleR;
     }
 
-    @PutMapping("/updateRole/{roleName}")
-    void updateRole(@RequestBody Role role, @RequestHeader String Authorization, @PathVariable String roleName) {
-
-    }
-
     @DeleteMapping("/deleteRole/{roleName}")
     ResponseEntity<String> deleteRole(@PathVariable String roleName, @RequestHeader String Authorization) {
         // System.out.println("ROLE NAME: " + roleName);
         String messg = "";
         try {
             roleService.deleteR(roleName);
+            messg = "Se borro";
+        } catch (Exception edr) {
+            System.out.println("No se borro\n" + edr);
+            messg = "No se borro\n" + edr;
+
+        }
+        return ResponseEntity.ok(messg);
+
+    }
+
+    @DeleteMapping("/deleteRoleC/{idClient}/{roleName}")
+    ResponseEntity<String> deleteRoleCliente(@PathVariable String idClient, @PathVariable String roleName,
+            @RequestHeader String Authorization) {
+        // System.out.println("ROLE NAME: " + roleName);
+        String messg = "";
+        try {
+            roleService.deleteRC(idClient, roleName);
             messg = "Se borro";
         } catch (Exception edr) {
             System.out.println("No se borro\n" + edr);
