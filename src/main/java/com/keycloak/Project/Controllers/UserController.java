@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/viewUsers")
-    List<UserRepresentation> userss(@RequestHeader String Authorization) {
+    public List<UserRepresentation> userss(@RequestHeader String Authorization) {
         List<UserRepresentation> lsUsersU = new ArrayList<UserRepresentation>();
         try {
             lsUsersU = userService.users();
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @GetMapping("/viewUser/{id}")
-    UserRepresentation user(@RequestHeader String Authorization, @PathVariable String id) {
+    public UserRepresentation user(@RequestHeader String Authorization, @PathVariable String id) {
         UserRepresentation userU = new UserRepresentation();
         try {
             userU = userService.user(id);
@@ -76,6 +76,34 @@ public class UserController {
             System.out.println("Usuario no encontrado");
         }
         return userU;
+    }
+
+    @GetMapping("/viewUser/{idUser}/{idClient}")
+    public List<Map<String, String>> userRole(@PathVariable String idClient, @PathVariable String idUser,
+            @RequestHeader String Authorization) {
+        List<Map<String, String>> roleU = new ArrayList<Map<String, String>>();
+        try {
+            roleU = userService.rolesCli(idClient, idUser);
+            System.out.println("Usuario consultado");
+        } catch (Exception eco) {
+            System.out.println(eco);
+            System.out.println("Usuario no encontrado");
+        }
+        return roleU;
+    }
+
+    @GetMapping("/viewUser/{idUser}/{idClient}/available")
+    public List<Map<String, String>> userRoleAvi(@PathVariable String idClient, @PathVariable String idUser,
+            @RequestHeader String Authorization) {
+        List<Map<String, String>> roleU = new ArrayList<Map<String, String>>();
+        try {
+            roleU = userService.rolesAvi(idClient, idUser);
+            System.out.println("Usuario consultado");
+        } catch (Exception eco) {
+            System.out.println(eco);
+            System.out.println("Usuario no encontrado");
+        }
+        return roleU;
     }
 
     @PostMapping("/createUser")
@@ -93,26 +121,20 @@ public class UserController {
     }
 
     @PutMapping("/updateUser/{id}")
-    void updateUser(@RequestBody User user, @RequestHeader String Authorization, @PathVariable String id) {
-        String username = user.getUsername();
-        String lastName = user.getLastName();
-        String firstName = user.getFirstName();
-        String email = user.getEmail();
-        String pass = user.getPassword();
-        String realm = user.getRealm();
-        String group = user.getGroup();
-        Boolean enabled = user.getEnabled();
+    public void updateUser(@RequestBody User user, @PathVariable String id, @RequestHeader String Authorization) {
+        // List<Map<String, String>> rolesClient = user.getRolesClient();
         String upUser = "";
         try {
-            upUser = userService.updateUser(id, username, lastName, firstName, email, pass, realm, group, enabled);
+            upUser = userService.updateUser(id, user);// , rolesClient);
             System.out.println(upUser);
         } catch (Exception eu) {
+            System.out.println("ERROR Controller");
             System.out.println(eu);
         }
     }
 
     @DeleteMapping("/deleteUser/{id}")
-    void deleteUser(@RequestHeader String Authorization, @PathVariable String id) {
+    public void deleteUser(@RequestHeader String Authorization, @PathVariable String id) {
         String deleteU = "";
         try {
             deleteU = userService.deleteUser(id);

@@ -71,6 +71,8 @@ public class ClientService {
             cliente.setAdminUrl(adminUrl);
             cliente.setEnabled(enabled);
             cliente.setDescription(description);
+            // cliente.setDefaultRoles(new String[] { "foo-role" });///creacion de roles a
+            // nivel cliente
             // cliente.setBaseUrl("");
 
             // realmResource.clients().create(cliente);
