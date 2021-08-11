@@ -90,7 +90,7 @@ public class RoleController {
     @GetMapping("/roles")
     public List<RoleRepresentation> rolesC(@RequestHeader String Authorization) {
 
-        List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); // instance.realm("SpringBoot").roles().list();
+        List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); // instance.realm("+System.getenv("REALM_KEY")+").roles().list();
         try {
             lsRoles = roleService.rolesC();
         } catch (Exception els) {
@@ -104,7 +104,7 @@ public class RoleController {
     // Authorization, @PathVariable String idClient) {
 
     // // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
-    // // instance.realm("SpringBoot").roles().list();
+    // // instance.realm("+System.getenv("REALM_KEY")+").roles().list();
     // // JSONArray jsonArr = new JSONArray();
     // List<Map<String, String>> jsonArr = new ArrayList<Map<String, String>>();
     // try {
@@ -120,7 +120,7 @@ public class RoleController {
     public List<RoleRepresentation> rolesCli(@PathVariable String idClient, @RequestHeader String Authorization) {
 
         // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
-        // instance.realm("SpringBoot").roles().list();
+        // instance.realm("+System.getenv("REALM_KEY")+").roles().list();
         // JSONArray jsonArr = new JSONArray();
         List<RoleRepresentation> rolesC = new ArrayList<RoleRepresentation>();
         try {
@@ -137,7 +137,7 @@ public class RoleController {
             @RequestHeader String Authorization) {
 
         // List<RoleRepresentation> lsRoles = new ArrayList<RoleRepresentation>(); //
-        // instance.realm("SpringBoot").roles().list();
+        // instance.realm("+System.getenv("REALM_KEY")+").roles().list();
         // JSONArray jsonArr = new JSONArray();
         // List<Map<String, String>> jsonArr = new ArrayList<Map<String, String>>();
         RoleRepresentation roleR = new RoleRepresentation();
@@ -152,7 +152,7 @@ public class RoleController {
 
     @GetMapping("/role/{roleName}")
     RoleRepresentation roleC(@PathVariable String roleName, @RequestHeader String Authorization) {
-        RoleRepresentation roleR = new RoleRepresentation();// instance.realm("SpringBoot").roles().get(roleName).toRepresentation();
+        RoleRepresentation roleR = new RoleRepresentation();// instance.realm("+System.getenv("REALM_KEY")+").roles().get(roleName).toRepresentation();
         try {
             roleR = roleService.roleC(roleName);
         } catch (Exception ecro) {

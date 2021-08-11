@@ -50,7 +50,7 @@ public class GroupController {
 
     @GetMapping("/groups")
     List<GroupRepresentation> groups(@RequestHeader String Authorization) {
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         List<GroupRepresentation> grupos = new ArrayList<GroupRepresentation>();
         try {
             grupos = groupService.groups(realm);
@@ -76,7 +76,7 @@ public class GroupController {
     @GetMapping("/group/{name}")
     GroupRepresentation group(@PathVariable String name, @RequestHeader String Authorization) {
         GroupRepresentation grupo = new GroupRepresentation();
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         try {
             grupo = groupService.groupR(name, realm);
         } catch (Exception eg) {

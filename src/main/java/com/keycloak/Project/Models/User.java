@@ -23,6 +23,7 @@ public class User {
     private String realm;
     private String group;
     private Boolean enabled;
+    private String idClient;
 
     // private String idClient;
     // private String idRole;
@@ -37,7 +38,7 @@ public class User {
     }
 
     public User(long id, String username, String lastName, String firstName, String email, String password,
-            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient) {
+            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient) {
         this.id = id;
         this.username = username;
         this.lastName = lastName;
@@ -48,10 +49,11 @@ public class User {
         this.group = group;
         this.enabled = enabled;
         this.rolesClient = rolesClient;
+        this.idClient = idClient;
     }
 
     public User(String username, String lastName, String firstName, String email, String password, String realm,
-            String group, Boolean enabled, List<Map<String, String>> rolesClient) {
+            String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient) {
         this.username = username;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -61,6 +63,7 @@ public class User {
         this.group = group;
         this.enabled = enabled;
         this.rolesClient = rolesClient;
+        this.idClient = idClient;
     }
 
     public long getId() {
@@ -143,11 +146,19 @@ public class User {
         this.rolesClient = rolesClient;
     }
 
+    public String getIdClient() {
+        return idClient;
+    }
+
+    public void setIdClient(String idClient) {
+        this.idClient = idClient;
+    }
+
     @Override
     public String toString() {
         return "User [email=" + email + ", enabled=" + enabled + ", firstName=" + firstName + ", group=" + group
-                + ", lastName=" + lastName + ", password=" + password + ", realm=" + realm + ", rolesClient="
-                + rolesClient + ", username=" + username + "]";
+                + ", idClient=" + idClient + ", lastName=" + lastName + ", password=" + password + ", realm=" + realm
+                + ", rolesClient=" + rolesClient + ", username=" + username + "]";
     }
 
     // public String getIdClient() {

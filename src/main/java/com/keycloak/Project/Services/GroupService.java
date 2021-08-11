@@ -46,8 +46,10 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class GroupService {
     public Keycloak instance() {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+        Keycloak instanceU = Keycloak.getInstance(
+                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
+                System.getenv("CLIENT_KEY"), "password");
         return instanceU;
     }
 
@@ -55,7 +57,8 @@ public class GroupService {
             throws ClientProtocolException, IOException {
         String token = "Bearer\n" + tokenG;
         System.out.println(token);
-        String link = "http://localhost:8080/auth/admin/realms/" + realm + "/groups/" + idG + "/role-mappings/realm";
+        String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY") + "/auth/admin/realms/"
+                + realm + "/groups/" + idG + "/role-mappings/realm";
         System.out.println("LINK: " + link);
         String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idR + "\",\n\t\t\"name\":\"" + nameR + "\"\n\t}\n]";
         System.out.println(jsonInput);
@@ -83,11 +86,11 @@ public class GroupService {
         // System.out.println(roles);
         // groupR.setRealmRoles(roles);// group.getRolesR());
         // groupR.setClientRoles(Arrays.asList("user"));
-        instance.realm("SpringBoot").groups().add(groupR);
+        instance.realm(System.getenv("REALM_KEY")).groups().add(groupR);
 
         GroupRepresentation grupo = new GroupRepresentation();
         try {
-            grupo = instance.realm("SpringBoot").getGroupByPath("/" + group.getName());
+            grupo = instance.realm(System.getenv("REALM_KEY")).getGroupByPath("/" + group.getName());
         } catch (Exception eg) {
             System.out.println(eg);
         }
@@ -112,7 +115,7 @@ public class GroupService {
         Keycloak instance = instance();
         GroupRepresentation grupo = new GroupRepresentation();
         try {
-            grupo = instance.realm("SpringBoot").getGroupByPath("/" + name);
+            grupo = instance.realm(System.getenv("REALM_KEY")).getGroupByPath("/" + name);
         } catch (Exception eg) {
             System.out.println(eg);
         }

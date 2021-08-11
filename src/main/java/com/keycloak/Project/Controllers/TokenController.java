@@ -41,7 +41,7 @@ public class TokenController {
     public ResponseEntity<String> token(@RequestBody User user) {
         String name = user.getUsername();
         String pass = user.getPassword();
-        String realm = "SpringBoot";// user.getRealm();
+        String realm = System.getenv("REALM_KEY");// user.getRealm();
         String tok = "";
         try {
             Keycloak instance = userService.instanceT(realm, name, pass);

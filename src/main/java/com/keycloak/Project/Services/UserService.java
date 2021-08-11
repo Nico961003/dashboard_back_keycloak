@@ -66,26 +66,29 @@ import org.json.JSONArray;
 @Component
 public class UserService {
     public Keycloak instance() {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+        Keycloak instanceU = Keycloak.getInstance(
+                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
+                System.getenv("CLIENT_KEY"), "password");
         return instanceU;
     }
 
     public Keycloak instanceT(String realm, String user, String password) {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", realm, user, password,
-                "login", "password");
+        Keycloak instanceU = Keycloak.getInstance(
+                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth", realm,
+                user, password, System.getenv("CLIENT_KEY"), "password");
         return instanceU;
     }
 
     public List<UserRepresentation> users() {
         Keycloak instance = instance();
-        List<UserRepresentation> lsUsersU = instance.realm("SpringBoot").users().search("");
+        List<UserRepresentation> lsUsersU = instance.realm(System.getenv("REALM_KEY")).users().search("");
         return lsUsersU;
     }
 
     public UserRepresentation user(String id) {
         Keycloak instance = instance();
-        UserResource userUp = instance.realm("SpringBoot").users().get(id);
+        UserResource userUp = instance.realm(System.getenv("REALM_KEY")).users().get(id);
         UserRepresentation userU = userUp.toRepresentation();
         return userU;
     }
@@ -158,8 +161,8 @@ public class UserService {
             // System.out.println("idRole => " + rolesCli.get("idRole"));
             // System.out.println("nameRole => " + rolesCli.get("nameRole"));
 
-            String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + userU.getId()
-                    + "/role-mappings/clients/" + idCliente;
+            String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY")
+                    + "/auth/admin/realms/" + realm + "/users/" + userU.getId() + "/role-mappings/clients/" + idCliente;
             String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
                     + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
 
@@ -218,7 +221,7 @@ public class UserService {
             System.out.println(exr);
         }
         String idUser = id;
-        String idClient = "ClienteSmartCentral";
+        String idClient = user.getIdClient();// "ClienteSmartCentral";
         List<Map<String, String>> rolesClient = rolesCli(idClient, idUser);
         // System.out.println("ROLES_ACTUALES: " + rolesClient);
 
@@ -231,8 +234,8 @@ public class UserService {
             // System.out.println(
             // "idCliente : " + idCliente + "\n" + "idRole : " + idRoleC + "\n" + "nameR : "
             // + nameR + "\n");
-            String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + id
-                    + "/role-mappings/clients/" + idCliente;
+            String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY")
+                    + "/auth/admin/realms/" + realm + "/users/" + id + "/role-mappings/clients/" + idCliente;
             String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
                     + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
 
@@ -266,8 +269,8 @@ public class UserService {
             String idRoleC = rolesCli.get("idRole");// user.getIdRole();// "04c8d43c-894e-45d4-838c-d342166fd0d6";
             String nameR = rolesCli.get("nameRole");// user.getNameRole();// "role_despachador";
 
-            String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + id
-                    + "/role-mappings/clients/" + idCliente;
+            String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY")
+                    + "/auth/admin/realms/" + realm + "/users/" + id + "/role-mappings/clients/" + idCliente;
             String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
                     + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
 
@@ -292,7 +295,7 @@ public class UserService {
 
     public String deleteUser(String id) {
         Keycloak instance = instance();
-        instance.realm("SpringBoot").users().get(id).remove();
+        instance.realm(System.getenv("REALM_KEY")).users().get(id).remove();
         return "El usuario con el id: " + id + " se elimino correctamente.";
 
     }
@@ -300,13 +303,13 @@ public class UserService {
     public List<Map<String, String>> rolesCli(String idClient, String idUser) {
         Keycloak instance = instance();
         String idCliente = idClient;// "ClienteSmartCentral";
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         // String idUser = "3cc1542f-7cce-4cdc-93c3-3defe039dc94";
         String json = "";
         TokenManager tokenmanager = instance.tokenManager();
         String token = "Bearer\n" + tokenmanager.getAccessTokenString();
-        String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + idUser
-                + "/role-mappings/clients/" + idCliente /* + "/available" */;
+        String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY") + "/auth/admin/realms/"
+                + realm + "/users/" + idUser + "/role-mappings/clients/" + idCliente /* + "/available" */;
 
         // String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\""
         // + nameR
@@ -325,7 +328,7 @@ public class UserService {
             HttpResponse response = httpClient.execute(request);
             InputStream inputStream = response.getEntity().getContent();
             // println inputStream
-            System.out.println("RESPONSE: " + response);
+            // System.out.println("RESPONSE: " + response);
             json = IOUtils.toString(inputStream, "UTF-8");
             // jsonTotal=json
             jsonArrPru = new JSONArray(json);
@@ -352,13 +355,13 @@ public class UserService {
     public List<Map<String, String>> rolesAvi(String idClient, String idUser) {
         Keycloak instance = instance();
         String idCliente = idClient;// "ClienteSmartCentral";
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         // String idUser = "3cc1542f-7cce-4cdc-93c3-3defe039dc94";
         String json = "";
         TokenManager tokenmanager = instance.tokenManager();
         String token = "Bearer\n" + tokenmanager.getAccessTokenString();
-        String link = "http://localhost:8080/auth/admin/realms/" + realm + "/users/" + idUser
-                + "/role-mappings/clients/" + idCliente + "/available";
+        String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY") + "/auth/admin/realms/"
+                + realm + "/users/" + idUser + "/role-mappings/clients/" + idCliente + "/available";
 
         // String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\""
         // + nameR
@@ -377,7 +380,7 @@ public class UserService {
             HttpResponse response = httpClient.execute(request);
             InputStream inputStream = response.getEntity().getContent();
             // println inputStream
-            System.out.println("RESPONSE: " + response);
+            // System.out.println("RESPONSE: " + response);
             json = IOUtils.toString(inputStream, "UTF-8");
             // jsonTotal=json
             jsonArrPru = new JSONArray(json);
@@ -403,7 +406,7 @@ public class UserService {
 
     public List<RoleRepresentation> rolesClientes(String idClient) {
         Keycloak instance = instance();
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         List<RoleRepresentation> rolesR = instance.realm(realm).clients().get(idClient).roles().list(); // roleResource.toRepresentation();
         return rolesR;
 

@@ -1,6 +1,5 @@
 package com.keycloak.Project.Controllers;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,7 +37,7 @@ import com.keycloak.Project.Repository.RealmRepository;
 
 @RestController
 @RequestMapping("/realm")
-public class RealmController{
+public class RealmController {
 
     @Autowired
     private RealmRepository realmRepository;
@@ -47,22 +46,23 @@ public class RealmController{
     RealmService realmService;
 
     @PostMapping("/createRealm")
-    public void createRealm(@RequestBody Realm realm, @RequestHeader String Authorization){
+    public void createRealm(@RequestBody Realm realm, @RequestHeader String Authorization) {
         String name = realm.getName();
         Boolean enabled = realm.getEnabled();
-        Keycloak instance = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1", "user1", "login", "password");
+        Keycloak instance = Keycloak.getInstance(
+                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
+                System.getenv("CLIENT_KEY"), "password");
         RealmRepresentation realmRep = new RealmRepresentation();
 
         // try{
-        //     realmRep.setName(name);
-        //     realmRep.setEnabled(enabled);
-        //     // instance.realm("SpringBoot").realms().create(realmRep);
+        // realmRep.setName(name);
+        // realmRep.setEnabled(enabled);
+        // // instance.realm("+System.getenv("REALM_KEY")+").realms().create(realmRep);
         // }catch(Exception erl){
-        //     System.out.println(erl);
+        // System.out.println(erl);
         // }
 
     }
-
-
 
 }

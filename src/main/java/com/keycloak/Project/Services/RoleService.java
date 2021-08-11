@@ -44,8 +44,10 @@ import org.springframework.stereotype.Component;
 public class RoleService {
 
     public Keycloak instance() {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+        Keycloak instanceU = Keycloak.getInstance(
+                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
+                System.getenv("CLIENT_KEY"), "password");
         return instanceU;
     }
 
@@ -75,25 +77,25 @@ public class RoleService {
             System.out.println("No se asigno rol \n" + exr);
         }
 
-        // instance.realm("SpringBoot").roles().create(roleR);
+        // instance.realm("+System.getenv("REALM_KEY")+").roles().create(roleR);
     }
 
     public List<RoleRepresentation> rolesC() {
         Keycloak instance = instance();
-        List<RoleRepresentation> lsRoles = instance.realm("SpringBoot").roles().list();
+        List<RoleRepresentation> lsRoles = instance.realm(System.getenv("REALM_KEY")).roles().list();
         return lsRoles;
     }
 
     public RoleRepresentation roleC(String roleName) {
         Keycloak instance = instance();
-        RoleRepresentation roleR = instance.realm("SpringBoot").roles().get(roleName).toRepresentation();
+        RoleRepresentation roleR = instance.realm(System.getenv("REALM_KEY")).roles().get(roleName).toRepresentation();
         return roleR;
 
     }
 
     public RoleRepresentation roleCliente(String idClient, String roleName) {
         Keycloak instance = instance();
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         // String idClient = "ClienteSmartCentral";
         RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
         RoleRepresentation roleR = roleResource.toRepresentation();
@@ -104,7 +106,7 @@ public class RoleService {
 
     public List<RoleRepresentation> rolesClientes(String idClient) {
         Keycloak instance = instance();
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         // String idClient = "ClienteSmartCentral";
         // RoleResource roleResource =
         // instance.realm(realm).clients().get(idClient).roles().list();
@@ -122,21 +124,21 @@ public class RoleService {
 
     public void deleteRC(String idClient, String roleName) {
         Keycloak instance = instance();
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         instance.realm(realm).clients().get(idClient).roles().deleteRole(roleName);
 
     }
 
     public void deleteR(String roleName) {
         Keycloak instance = instance();
-        instance.realm("SpringBoot").roles().get(roleName).remove();
+        instance.realm(System.getenv("REALM_KEY")).roles().get(roleName).remove();
 
     }
 
     public void updateRoleC(String roleName, String description, String idClient,
             Map<String, List<String>> attributes) {
         Keycloak instance = instance();
-        String realm = "SpringBoot";
+        String realm = System.getenv("REALM_KEY");
         RoleRepresentation roleR = new RoleRepresentation();
         roleR.setDescription(description);
         roleR.setClientRole(true);

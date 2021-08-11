@@ -31,20 +31,22 @@ import org.keycloak.admin.client.resource.*;
 @Component
 public class ClientService {
     public Keycloak instance() {
-        Keycloak instanceU = Keycloak.getInstance("http://localhost" + ":" + "8080" + "/auth", "SpringBoot", "user1",
-                "user1", "login", "password");
+        Keycloak instanceU = Keycloak.getInstance(
+                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
+                System.getenv("CLIENT_KEY"), "password");
         return instanceU;
     }
 
     public List<ClientRepresentation> clients() {
         Keycloak instance = instance();
-        List<ClientRepresentation> lsClientes = instance.realm("SpringBoot").clients().findAll();
+        List<ClientRepresentation> lsClientes = instance.realm(System.getenv("REALM_KEY")).clients().findAll();
         return lsClientes;
     }
 
     public ClientRepresentation client(String name) {
         Keycloak instance = instance();
-        ClientRepresentation cliente = instance.realm("SpringBoot").clients().findByClientId(name).get(0);
+        ClientRepresentation cliente = instance.realm(System.getenv("REALM_KEY")).clients().findByClientId(name).get(0);
         return cliente;
     }
 
@@ -91,7 +93,7 @@ public class ClientService {
         Keycloak instance = instance();
         try {
 
-            instance.realm("SpringBoot").clients().get(name).remove();
+            instance.realm(System.getenv("REALM_KEY")).clients().get(name).remove();
 
             borrarCliente = "Se borro el cliente " + name;
         } catch (Exception ed) {
@@ -107,7 +109,8 @@ public class ClientService {
         String updateC = "";
         Keycloak instance = instance();
         try {
-            ClientRepresentation cliente = instance.realm("SpringBoot").clients().findByClientId(name).get(0);
+            ClientRepresentation cliente = instance.realm(System.getenv("REALM_KEY")).clients().findByClientId(name)
+                    .get(0);
 
             cliente.setName(nameC);
             // cliente.setId(nameC);
