@@ -62,7 +62,9 @@ public class RoleService {
         Map<String, List<String>> atributos = new HashMap<>();
         List<String> estado = status.get("value");
         List<String> atribut = attributes.get("value");
-        for (int j = 0; j <= attributes.size(); j++) {
+        // System.out.println(atribut.size());
+        for (int j = 0; j < atribut.size(); j++) {
+            // System.out.println(atribut.get(j));
             String atr = atribut.get(j);
             String est = estado.get(j);
             atributos.put(atr, Arrays.asList(est));
