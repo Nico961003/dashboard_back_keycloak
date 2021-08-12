@@ -79,7 +79,8 @@ public class RoleService {
             clientRepresentation = instance.realm(realm).clients().findByClientId(idClient).get(0);
             System.out.println("cliente con id de: " + clientRepresentation.getId());
             instance.realm(realm).clients().get(clientRepresentation.getId()).roles().create(roleR);
-            RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
+            RoleResource roleResource = instance.realm(realm).clients().get(clientRepresentation.getId()).roles()
+                    .get(roleName);
             roleResource.update(roleR);
         } catch (Exception exr) {
             System.out.println("No se asigno rol \n" + exr);
