@@ -52,19 +52,25 @@ public class RoleService {
     }
 
     public void createRole(String roleName, String description, String realm, String idClient,
-            Map<String, List<String>> attributes) {
+            Map<String, List<String>> attributes, Map<String, List<String>> status) {
         Keycloak instance = instance();
         RoleRepresentation roleR = new RoleRepresentation();
         roleR.setName(roleName);
         roleR.setDescription(description);
         roleR.setClientRole(true);
         // roleR.singleAttribute("consultSales", "false");
-        // Map<String, List<String>> attributes = new HashMap<>();
-        // attributes.put("consultPays", Collections.singletonList("true"));
-        // attributes.put("consultSales", Collections.singletonList("false"));
+        Map<String, List<String>> atributos = new HashMap<>();
+        List<String> estado = status.get("value");
+        List<String> atribut = attributes.get("value");
+        for (int j = 0; j <= attributes.size(); j++) {
+            String atr = atribut.get(j);
+            String est = estado.get(j);
+            atributos.put(atr, Arrays.asList(est));
+        }
+
         System.out.println("ATRIBUTOS: " + attributes);
 
-        roleR.setAttributes(attributes);
+        roleR.setAttributes(atributos);
         // String clientId = "ClienteSmartCentral";
         ClientRepresentation clientRepresentation = new ClientRepresentation();
         try {
@@ -99,7 +105,7 @@ public class RoleService {
         // String idClient = "ClienteSmartCentral";
         RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
         RoleRepresentation roleR = roleResource.toRepresentation();
-        System.out.println("ROLE: \n" + roleR);
+        // System.out.println("ROLE: \n" + roleR);
         return roleR;
 
     }
@@ -135,15 +141,24 @@ public class RoleService {
 
     }
 
-    public void updateRoleC(String roleName, String description, String idClient,
-            Map<String, List<String>> attributes) {
+    public void updateRoleC(String roleName, String description, String idClient, Map<String, List<String>> attributes,
+            Map<String, List<String>> status) {
         Keycloak instance = instance();
         String realm = System.getenv("REALM_KEY");
         RoleRepresentation roleR = new RoleRepresentation();
         roleR.setDescription(description);
         roleR.setClientRole(true);
-        roleR.setAttributes(attributes);
+
         roleR.setName(roleName);
+        Map<String, List<String>> atributos = new HashMap<>();
+        List<String> estado = status.get("value");
+        List<String> atribut = attributes.get("value");
+        for (int j = 0; j <= attributes.size(); j++) {
+            String atr = atribut.get(j);
+            String est = estado.get(j);
+            atributos.put(atr, Arrays.asList(est));
+        }
+        roleR.setAttributes(atributos);
         try {
             RoleResource roleResource = instance.realm(realm).clients().get(idClient).roles().get(roleName);
             roleResource.update(roleR);// update role

@@ -22,17 +22,23 @@ public class Role {
     private String description;
     private String idClient;
 
+    // @ElementCollection(targetClass = String.class)
+    // // @OneToMany(targetEntity=Student.class, mappedBy="college",
+    // // fetch=FetchType.EAGER)
+    // private Map<String, List<String>> attributes;
+
     @ElementCollection(targetClass = String.class)
-    // @OneToMany(targetEntity=Student.class, mappedBy="college",
-    // fetch=FetchType.EAGER)
     private Map<String, List<String>> attributes;
+
+    @ElementCollection(targetClass = String.class)
+    private Map<String, List<String>> status;
 
     public Role() {
 
     }
 
     public Role(long id, String identifier, String name, Boolean clientRole, String realm, String description,
-            String idClient, Map<String, List<String>> attributes) {
+            String idClient, Map<String, List<String>> attributes, Map<String, List<String>> status) {
         this.id = id;
         this.identifier = identifier;
         this.name = name;
@@ -41,10 +47,11 @@ public class Role {
         this.description = description;
         this.idClient = idClient;
         this.attributes = attributes;
+        this.status = status;
     }
 
     public Role(String identifier, String name, Boolean clientRole, String realm, String description, String idClient,
-            Map<String, List<String>> attributes) {
+            Map<String, List<String>> attributes, Map<String, List<String>> status) {
         this.identifier = identifier;
         this.name = name;
         this.clientRole = clientRole;
@@ -52,6 +59,7 @@ public class Role {
         this.description = description;
         this.idClient = idClient;
         this.attributes = attributes;
+        this.status = status;
     }
 
     public String getRealm() {
@@ -118,11 +126,19 @@ public class Role {
         this.attributes = attributes;
     }
 
+    public Map<String, List<String>> getStatus() {
+        return status;
+    }
+
+    public void setStatus(Map<String, List<String>> status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Role [attributes=" + attributes + ", clientRole=" + clientRole + ", description=" + description
-                + ", id=" + id + ", idClient=" + idClient + ", identifier=" + identifier + ", name=" + name + ", realm="
-                + realm + "]";
+                + ", idClient=" + idClient + ", identifier=" + identifier + ", name=" + name + ", realm=" + realm
+                + ", status=" + status + "]";
     }
 
 }
