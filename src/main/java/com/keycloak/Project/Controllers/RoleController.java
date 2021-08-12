@@ -71,7 +71,7 @@ public class RoleController {
 
     @PutMapping("/rolesC/updateRoleC/{idClient}/{roleName}")
     ResponseEntity<String> updateRole(@RequestBody Role role, @PathVariable String idClient,
-            @PathVariable String roleName) {// , @RequestHeader String Authorization) {
+            @PathVariable String roleName, @RequestHeader String Authorization) {
         String messagC = "";
         // String roleName = role.getName();
         String description = role.getDescription();
