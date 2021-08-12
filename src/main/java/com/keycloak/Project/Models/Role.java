@@ -28,17 +28,17 @@ public class Role {
     // private Map<String, List<String>> attributes;
 
     @ElementCollection(targetClass = String.class)
-    private Map<String, List<String>> attributes;
+    private List<String> attributes;
 
     @ElementCollection(targetClass = String.class)
-    private Map<String, List<String>> status;
+    private List<String> status;
 
     public Role() {
 
     }
 
     public Role(long id, String identifier, String name, Boolean clientRole, String realm, String description,
-            String idClient, Map<String, List<String>> attributes, Map<String, List<String>> status) {
+            String idClient, List<String> attributes, List<String> status) {
         this.id = id;
         this.identifier = identifier;
         this.name = name;
@@ -51,7 +51,7 @@ public class Role {
     }
 
     public Role(String identifier, String name, Boolean clientRole, String realm, String description, String idClient,
-            Map<String, List<String>> attributes, Map<String, List<String>> status) {
+            List<String> attributes, List<String> status) {
         this.identifier = identifier;
         this.name = name;
         this.clientRole = clientRole;
@@ -118,19 +118,19 @@ public class Role {
         this.idClient = idClient;
     }
 
-    public Map<String, List<String>> getAttributes() {
+    public List<String> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String, List<String>> attributes) {
+    public void setAttributes(List<String> attributes) {
         this.attributes = attributes;
     }
 
-    public Map<String, List<String>> getStatus() {
+    public List<String> getStatus() {
         return status;
     }
 
-    public void setStatus(Map<String, List<String>> status) {
+    public void setStatus(List<String> status) {
         this.status = status;
     }
 

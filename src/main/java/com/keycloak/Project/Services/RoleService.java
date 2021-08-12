@@ -51,8 +51,8 @@ public class RoleService {
         return instanceU;
     }
 
-    public void createRole(String roleName, String description, String realm, String idClient,
-            Map<String, List<String>> attributes, Map<String, List<String>> status) {
+    public void createRole(String roleName, String description, String realm, String idClient, List<String> attributes,
+            List<String> status) {
         Keycloak instance = instance();
         RoleRepresentation roleR = new RoleRepresentation();
         roleR.setName(roleName);
@@ -60,17 +60,17 @@ public class RoleService {
         roleR.setClientRole(true);
         // roleR.singleAttribute("consultSales", "false");
         Map<String, List<String>> atributos = new HashMap<>();
-        List<String> estado = status.get("value");
-        List<String> atribut = attributes.get("value");
+        // List<String> estado = status.get("value");
+        // List<String> atribut = attributes.get("value");
         // System.out.println(atribut.size());
-        for (int j = 0; j < atribut.size(); j++) {
+        for (int j = 0; j < attributes.size(); j++) {
             // System.out.println(atribut.get(j));
-            String atr = atribut.get(j);
-            String est = estado.get(j);
+            String atr = attributes.get(j);
+            String est = status.get(j);
             atributos.put(atr, Arrays.asList(est));
         }
 
-        System.out.println("ATRIBUTOS: " + attributes);
+        // System.out.println("ATRIBUTOS: " + attributes);
 
         roleR.setAttributes(atributos);
         // String clientId = "ClienteSmartCentral";
@@ -143,8 +143,8 @@ public class RoleService {
 
     }
 
-    public void updateRoleC(String roleName, String description, String idClient, Map<String, List<String>> attributes,
-            Map<String, List<String>> status) {
+    public void updateRoleC(String roleName, String description, String idClient, List<String> attributes,
+            List<String> status) {
         Keycloak instance = instance();
         String realm = System.getenv("REALM_KEY");
         RoleRepresentation roleR = new RoleRepresentation();
@@ -153,11 +153,11 @@ public class RoleService {
 
         roleR.setName(roleName);
         Map<String, List<String>> atributos = new HashMap<>();
-        List<String> estado = status.get("value");
-        List<String> atribut = attributes.get("value");
-        for (int j = 0; j <= attributes.size(); j++) {
-            String atr = atribut.get(j);
-            String est = estado.get(j);
+        // List<String> estado = status.get("value");
+        // List<String> atribut = attributes.get("value");
+        for (int j = 0; j < attributes.size(); j++) {
+            String atr = attributes.get(j);
+            String est = status.get(j);
             atributos.put(atr, Arrays.asList(est));
         }
         roleR.setAttributes(atributos);

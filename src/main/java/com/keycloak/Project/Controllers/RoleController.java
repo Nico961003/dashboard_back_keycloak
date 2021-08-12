@@ -54,10 +54,10 @@ public class RoleController {
         String description = role.getDescription();
         String realm = role.getRealm();
         String idClient = role.getIdClient();
-        Map<String, List<String>> attributes = role.getAttributes();
-        Map<String, List<String>> status = role.getStatus();
+        List<String> attributes = role.getAttributes();
+        List<String> status = role.getStatus();
         // Map<String, List<String>> attributes = role.getAttributes();
-        System.out.println(role);
+        // System.out.println(role);
         try {
             roleService.createRole(roleName, description, realm, idClient, attributes, status);
             messagC = "Rol " + roleName + " Creado";
@@ -78,8 +78,8 @@ public class RoleController {
         String realm = role.getRealm();
         // String idClient = role.getIdClient();
         // Map<String, List<String>> attributes = role.getAttributes();
-        Map<String, List<String>> attributes = role.getAttributes();
-        Map<String, List<String>> status = role.getStatus();
+        List<String> attributes = role.getAttributes();
+        List<String> status = role.getStatus();
         System.out.println(role);
         try {
             roleService.updateRoleC(roleName, description, idClient, attributes, status);
