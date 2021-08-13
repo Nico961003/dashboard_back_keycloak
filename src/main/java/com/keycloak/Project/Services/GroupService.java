@@ -47,7 +47,7 @@ import java.time.temporal.ChronoUnit;
 public class GroupService {
     public Keycloak instance() {
         Keycloak instanceU = Keycloak.getInstance(
-                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("HOST_KEY") + "/auth",
                 System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
                 System.getenv("CLIENT_KEY"), "password");
         return instanceU;
@@ -57,7 +57,7 @@ public class GroupService {
             throws ClientProtocolException, IOException {
         String token = "Bearer\n" + tokenG;
         System.out.println(token);
-        String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY") + "/auth/admin/realms/"
+        String link = System.getenv("HOST_KEY")  + "/auth/admin/realms/"
                 + realm + "/groups/" + idG + "/role-mappings/realm";
         System.out.println("LINK: " + link);
         String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idR + "\",\n\t\t\"name\":\"" + nameR + "\"\n\t}\n]";

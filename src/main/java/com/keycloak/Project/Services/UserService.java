@@ -67,7 +67,7 @@ import org.json.JSONArray;
 public class UserService {
     public Keycloak instance() {
         Keycloak instanceU = Keycloak.getInstance(
-                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("HOST_KEY") + "/auth",
                 System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
                 System.getenv("CLIENT_KEY"), "password");
         return instanceU;
@@ -75,7 +75,7 @@ public class UserService {
 
     public Keycloak instanceT(String realm, String user, String password) {
         Keycloak instanceU = Keycloak.getInstance(
-                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth", realm,
+                System.getenv("HOST_KEY") + "/auth", realm,
                 user, password, System.getenv("CLIENT_KEY"), "password");
         return instanceU;
     }
@@ -161,7 +161,7 @@ public class UserService {
             // System.out.println("idRole => " + rolesCli.get("idRole"));
             // System.out.println("nameRole => " + rolesCli.get("nameRole"));
 
-            String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY")
+            String link = System.getenv("HOST_KEY") 
                     + "/auth/admin/realms/" + realm + "/users/" + userU.getId() + "/role-mappings/clients/" + idCliente;
             String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
                     + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
@@ -234,7 +234,7 @@ public class UserService {
             // System.out.println(
             // "idCliente : " + idCliente + "\n" + "idRole : " + idRoleC + "\n" + "nameR : "
             // + nameR + "\n");
-            String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY")
+            String link = System.getenv("HOST_KEY") 
                     + "/auth/admin/realms/" + realm + "/users/" + id + "/role-mappings/clients/" + idCliente;
             String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
                     + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
@@ -269,7 +269,7 @@ public class UserService {
             String idRoleC = rolesCli.get("idRole");// user.getIdRole();// "04c8d43c-894e-45d4-838c-d342166fd0d6";
             String nameR = rolesCli.get("nameRole");// user.getNameRole();// "role_despachador";
 
-            String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY")
+            String link = System.getenv("HOST_KEY") 
                     + "/auth/admin/realms/" + realm + "/users/" + id + "/role-mappings/clients/" + idCliente;
             String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\"" + nameR
                     + "\",\n\t\t\"containerId\":\"" + idCliente + "\"\n\t}\n]";
@@ -308,7 +308,7 @@ public class UserService {
         String json = "";
         TokenManager tokenmanager = instance.tokenManager();
         String token = "Bearer\n" + tokenmanager.getAccessTokenString();
-        String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY") + "/auth/admin/realms/"
+        String link = System.getenv("HOST_KEY")  + "/auth/admin/realms/"
                 + realm + "/users/" + idUser + "/role-mappings/clients/" + idCliente /* + "/available" */;
 
         // String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\""
@@ -360,7 +360,7 @@ public class UserService {
         String json = "";
         TokenManager tokenmanager = instance.tokenManager();
         String token = "Bearer\n" + tokenmanager.getAccessTokenString();
-        String link = "http://" + System.getenv("HOST_KEY") + ":" + System.getenv("PORT_KEY") + "/auth/admin/realms/"
+        String link = System.getenv("HOST_KEY")  + "/auth/admin/realms/"
                 + realm + "/users/" + idUser + "/role-mappings/clients/" + idCliente + "/available";
 
         // String jsonInput = "[\n\t{\n\t\t\"id\":\"" + idRoleC + "\",\n\t\t\"name\":\""

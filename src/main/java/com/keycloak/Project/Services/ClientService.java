@@ -32,7 +32,7 @@ import org.keycloak.admin.client.resource.*;
 public class ClientService {
     public Keycloak instance() {
         Keycloak instanceU = Keycloak.getInstance(
-                "http://" + System.getenv("HOST_KEY") + "" + ":" + "" + System.getenv("PORT_KEY") + "" + "/auth",
+                System.getenv("HOST_KEY") + "/auth",
                 System.getenv("REALM_KEY"), System.getenv("USER_KEY"), System.getenv("PASS_KEY"),
                 System.getenv("CLIENT_KEY"), "password");
         return instanceU;
