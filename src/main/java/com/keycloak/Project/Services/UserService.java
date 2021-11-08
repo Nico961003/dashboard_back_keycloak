@@ -93,6 +93,33 @@ public class UserService {
         return userU;
     }
 
+    public UserRepresentation userForUsername(String username) {
+        Keycloak instance = instance();
+        List<UserRepresentation> userUpLs = new ArrayList<UserRepresentation>();
+        userUpLs = instance.realm(System.getenv("REALM_KEY")).users().search(username);
+        UserRepresentation userU = userUpLs.get(0);
+        return userU;
+    }
+
+    public UserRepresentation userForEmail(String email) {
+        Keycloak instance = instance();
+        List<UserRepresentation> userUpLs = new ArrayList<UserRepresentation>();
+        UserRepresentation userU = new UserRepresentation();
+        userUpLs = instance.realm(System.getenv("REALM_KEY")).users().list();
+        for (int x = 0; x < userUpLs.size(); x++) {
+            try {
+                if (userUpLs.get(x).getEmail().equals(email) || userUpLs.get(x).getEmail() == email) {
+                    userU = userUpLs.get(x);
+                    break;
+                }
+            } catch (Exception exlsu) {
+                System.out.println(exlsu);
+            }
+            // System.out.println(x);
+        }
+        return userU;
+    }
+
     public String createUser(User user) {
 
         String username = user.getUsername();

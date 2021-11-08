@@ -144,4 +144,31 @@ public class UserController {
         }
     }
 
+    @GetMapping("/viewUserName/{username}")
+    public UserRepresentation userForName(@RequestHeader String Authorization, @PathVariable String username) {
+        UserRepresentation userU = new UserRepresentation();
+        try {
+            userU = userService.userForUsername(username);
+            System.out.println("Usuario consultado");
+        } catch (Exception eco) {
+            System.out.println(eco);
+            System.out.println("Usuario no encontrado");
+        }
+        return userU;
+    }
+
+    @GetMapping("/viewUserEmail/{email}")
+    public UserRepresentation userForEmail(@RequestHeader String Authorization, @PathVariable String email) {
+        System.out.println(email);
+        UserRepresentation userE = new UserRepresentation();
+        try {
+            userE = userService.userForEmail(email.toString());
+            System.out.println("Usuario consultado");
+        } catch (Exception eco) {
+            System.out.println(eco);
+            System.out.println("Usuario no encontrado");
+        }
+        return userE;
+    }
+
 }
