@@ -196,11 +196,11 @@ public class UserController {
 
     @PostMapping("/logout/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    void logoutUser(@PathVariable String id, @RequestHeader String Authorization) {
+    void logoutUser(@PathVariable String id) {
 
         String realm = System.getenv("REALM_KEY");
         try {
-            Keycloak instance = userService.logoutUser(realm, id.toString(), Authorization);
+            Keycloak instance = userService.logoutUser(realm, id.toString());
         } catch (Exception e) {
             System.out.println("no creado: " + e);
         }

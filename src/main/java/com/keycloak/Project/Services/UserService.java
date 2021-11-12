@@ -466,9 +466,10 @@ public class UserService {
 
     }
 
-    public Keycloak logoutUser(String realm, String id, String token) {
-
+    public Keycloak logoutUser(String realm, String id) {
         Keycloak instance = instance();
+        TokenManager tokenmanager = instance.tokenManager();
+        String token = "Bearer\n" + tokenmanager.getAccessTokenString();
         String link = System.getenv("HOST_KEY")  + "/auth/admin/realms/" + realm + "/users/" + id + "/logout";
         // System.out.println(link);
 
