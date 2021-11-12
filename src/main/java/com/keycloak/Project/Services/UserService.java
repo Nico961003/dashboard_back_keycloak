@@ -60,9 +60,17 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import java.io.*;
 @Component
 public class UserService {
     public Keycloak instance() {
@@ -115,10 +123,29 @@ public class UserService {
             } catch (Exception exlsu) {
                 System.out.println(exlsu);
             }
-            // System.out.println(x);
         }
+
         return userU;
     }
+
+    // public String idByEmail(String email) {
+    //     Keycloak instance = instance();
+    //     List<UserRepresentation> userUpLs = new ArrayList<UserRepresentation>();
+    //     UserRepresentation userU = new UserRepresentation();
+    //     userUpLs = instance.realm(System.getenv("REALM_KEY")).users().list();
+    //     for (int x = 0; x < userUpLs.size(); x++) {
+    //         try {
+    //             if (userUpLs.get(x).getEmail().equals(email) || userUpLs.get(x).getEmail() == email) {
+    //                 userU = userUpLs.get(x);
+    //                 break;
+    //             }
+    //         } catch (Exception exlsu) {
+    //             System.out.println(exlsu);
+    //         }
+    //     }
+
+    //     return userU.getId();
+    // }
 
     public String createUser(User user) {
 
@@ -437,6 +464,61 @@ public class UserService {
         List<RoleRepresentation> rolesR = instance.realm(realm).clients().get(idClient).roles().list(); // roleResource.toRepresentation();
         return rolesR;
 
+    }
+
+    public Keycloak logoutUser(String realm, String id, String token) {
+
+        Keycloak instance = instance();
+        String link = System.getenv("HOST_KEY")  + "/auth/admin/realms/" + realm + "/users/" + id + "/logout";
+        // System.out.println(link);
+
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        HttpPost request = new HttpPost(link);
+        request.addHeader("content-type", "application/json;charset=UTF-8");
+        request.addHeader("Access-Control-Allow-Origin", "*");
+        request.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        request.addHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+        request.addHeader("Authorization", token);
+
+        try {
+            HttpResponse response = httpClient.execute(request);
+        } catch (Exception exh) {
+            System.out.println(exh);
+        }
+
+        return instance;
+    }
+
+    public Keycloak sendEmail(String id) {
+        String realm = System.getenv("REALM_KEY");
+        Keycloak instance = instance();
+        TokenManager tokenmanager = instance.tokenManager();
+        String token = "Bearer\n" + tokenmanager.getAccessTokenString();
+        String link = System.getenv("HOST_KEY")  + "/auth/admin/realms/" + realm + "/users/" + id + "/execute-actions-email";
+        // System.out.println(link);
+        HttpClient httpClient = HttpClientBuilder.create().build();
+        // String stringEntity = new Entity("[UPDATE_PASSWORD]");
+        HttpPut request = new HttpPut(link);
+        try {
+        // request.setEntity(stringEntity);
+        request.setEntity(new StringEntity("[\"UPDATE_PASSWORD\"]"));
+        request.addHeader("content-type", "application/json;charset=UTF-8");
+        request.addHeader("Access-Control-Allow-Origin", "*");
+        request.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        request.addHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with");
+        request.addHeader("Authorization", token);
+        System.out.println(request);
+        } catch (IOException ioe) {
+
+        }
+
+        try {
+            HttpResponse response = httpClient.execute(request);
+        } catch (Exception exh) {
+            System.out.println(exh);
+        }
+
+        return instance;
     }
 }
 

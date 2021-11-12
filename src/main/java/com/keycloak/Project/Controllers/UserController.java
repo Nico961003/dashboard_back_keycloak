@@ -157,6 +157,29 @@ public class UserController {
         return userU;
     }
 
+    @GetMapping("/sendRestoreEmail/{email}")
+    public String sendRestoreEmail(@PathVariable String email) {
+        UserRepresentation userE = new UserRepresentation();
+        String id = "";
+        // UserRepresentation restore = new UserRepresentation();
+
+        try {
+            userE = userService.userForEmail(email.toString());
+            id = userE.getId().toString();
+            Keycloak instance = userService.sendEmail(id.toString());
+            if (id != "") {
+                id = "success";
+            } else {
+                id ="";
+            }
+        } catch (Exception eco) {
+            System.out.println(eco);
+            System.out.println("Usuario no encontrado");
+        }
+
+        return id;
+    }
+
     @GetMapping("/viewUserEmail/{email}")
     public UserRepresentation userForEmail(@RequestHeader String Authorization, @PathVariable String email) {
         System.out.println(email);
@@ -169,6 +192,19 @@ public class UserController {
             System.out.println("Usuario no encontrado");
         }
         return userE;
+    }
+
+    @PostMapping("/logout/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    void logoutUser(@PathVariable String id, @RequestHeader String Authorization) {
+
+        String realm = System.getenv("REALM_KEY");
+        try {
+            Keycloak instance = userService.logoutUser(realm, id.toString(), Authorization);
+        } catch (Exception e) {
+            System.out.println("no creado: " + e);
+        }
+        
     }
 
 }
