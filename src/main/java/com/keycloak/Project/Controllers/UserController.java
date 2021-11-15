@@ -167,13 +167,17 @@ public class UserController {
             userE = userService.userForEmail(email.toString());
             id = userE.getId().toString();
             Keycloak instance = userService.sendEmail(id.toString());
-            if (id != "") {
-                id = "success";
+            if (userE.isEnabled() == false) {
+                id = "inactivo";
             } else {
-                id ="";
+                if (id != "") {
+                    id = "success";
+                } else {
+                    id ="";
+                }
             }
         } catch (Exception eco) {
-            System.out.println(eco);
+            // System.out.println(eco);
             System.out.println("Usuario no encontrado");
         }
 
