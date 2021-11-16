@@ -111,8 +111,10 @@ public class UserController {
     void createUser(@RequestBody User user, @RequestHeader String Authorization) {
 
         String creadoKey = "";
+        List<String> attributes = user.getAttributes();
+
         try {
-            creadoKey = userService.createUser(user);
+            creadoKey = userService.createUser(user, attributes);
             System.out.println(creadoKey);
         } catch (Exception e) {
             System.out.println("no creado: " + e);

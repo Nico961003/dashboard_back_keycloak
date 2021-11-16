@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.ElementCollection;
+import javax.persistence.OneToMany;
+
 
 @Entity
 public class User {
@@ -34,11 +36,14 @@ public class User {
     // fetch=FetchType.EAGER)
     private List<Map<String, String>> rolesClient;
 
+    @ElementCollection(targetClass = String.class)
+    private List<String> attributes;
+
     public User() {
     }
 
     public User(long id, String username, String lastName, String firstName, String email, String password,
-            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient) {
+            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient, List<String> attributes) {
         this.id = id;
         this.username = username;
         this.lastName = lastName;
@@ -50,10 +55,11 @@ public class User {
         this.enabled = enabled;
         this.rolesClient = rolesClient;
         this.idClient = idClient;
+        this.attributes = attributes;
     }
 
     public User(String username, String lastName, String firstName, String email, String password, String realm,
-            String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient) {
+            String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient, List<String> attributes) {
         this.username = username;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -64,6 +70,7 @@ public class User {
         this.enabled = enabled;
         this.rolesClient = rolesClient;
         this.idClient = idClient;
+        this.attributes = attributes;
     }
 
     public long getId() {
@@ -154,35 +161,19 @@ public class User {
         this.idClient = idClient;
     }
 
+    public List<String> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(List<String> attributes) {
+        this.attributes = attributes;
+    }
+
     @Override
     public String toString() {
-        return "User [email=" + email + ", enabled=" + enabled + ", firstName=" + firstName + ", group=" + group
+        return "User [attributes=" + attributes + ",email=" + email + ", enabled=" + enabled + ", firstName=" + firstName + ", group=" + group
                 + ", idClient=" + idClient + ", lastName=" + lastName + ", password=" + password + ", realm=" + realm
                 + ", rolesClient=" + rolesClient + ", username=" + username + "]";
     }
-
-    // public String getIdClient() {
-    // return idClient;
-    // }
-
-    // public void setIdClient(String idClient) {
-    // this.idClient = idClient;
-    // }
-
-    // public String getIdRole() {
-    // return idRole;
-    // }
-
-    // public void setIdRole(String idRole) {
-    // this.idRole = idRole;
-    // }
-
-    // public String getNameRole() {
-    // return nameRole;
-    // }
-
-    // public void setNameRole(String nameRole) {
-    // this.nameRole = nameRole;
-    // }
 
 }

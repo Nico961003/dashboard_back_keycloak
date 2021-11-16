@@ -147,7 +147,7 @@ public class UserService {
     //     return userU.getId();
     // }
 
-    public String createUser(User user) {
+    public String createUser(User user, List<String> attributes) {
 
         String username = user.getUsername();
         String lastName = user.getLastName();
@@ -177,23 +177,23 @@ public class UserService {
         userN.setLastName(lastName);
         userN.setCredentials(Arrays.asList(credential));
         userN.setEnabled(enabled);
-        // userN.setId(group);
-        // userN.setGroups(Arrays.asList(group));
-        // userN.setClientgroups(Collections.singletonMap(Constants.REALM_MANAGEMENT_CLIENT_ID,
-        // Collections.singletonList(Admingroups.MANAGE_CLIENTS)));
-        // List<String> groupls = new ArrayList<String>();
-        // groupls.add(group);
-        // System.out.println(groupls);
-        // userN.setRealmgroups(Arrays.asList("user"));
         userN.setEmail(email);
-        // System.out.println(userN);
 
-        // Map<String, List<String>> clientRoles = new HashMap<>();
-        // clientRoles.put("ClienteSmartCentral",
-        // Collections.singletonList("role_userB2"));
-        // userN.setClientRoles(clientRoles);
+
+        Map<String, List<String>> atributos = new HashMap<>();
+        for (int j = 0; j < attributes.size(); j++) {
+            System.out.println(attributes.get(j));
+            String atr = attributes.get(j);
+            // String est = status.get(j);
+            atributos.put("client", Arrays.asList(atr));
+        }
+
+        // System.out.println("ATRIBUTOS: " + attributes);
+
+        userN.setAttributes(atributos);
+
+
         instance.realm(realm).users().create(userN);
-
         UserRepresentation userU = instance.realm(realm).users().search(username).get(0);
         // System.out.println("ID user: " + userU.getId());
         // instance.realm(realm).users().get(userU.getId()).update(userN);
