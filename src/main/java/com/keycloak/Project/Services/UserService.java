@@ -71,6 +71,8 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.*;
+import org.json.*;
+import java.util.Base64;
 @Component
 public class UserService {
     public Keycloak instance() {
@@ -235,6 +237,51 @@ public class UserService {
         }
 
         return "Usuario " + username + " Creado";
+    }
+
+    public String sendCredentials (User user) {
+
+      String link = System.getenv("HOST_EMAIL") + "/email/send";
+      String data = "YOUR CREDENTIALS\n\n" + "Username: " + user.getUsername() + "\nPassword: " + user.getPassword() + "\nEmail: " + user.getEmail();
+      String data_encode = Base64.getEncoder().encodeToString(data.getBytes());
+
+      // to
+      JSONObject jo = new JSONObject();
+    //   jo.put("email", user.getEmail());
+      jo.put("email", "genaro.rodriguez@smartqs.com");
+      jo.put("type", "to");
+      // 
+      JSONArray ja = new JSONArray();
+      ja.put(jo);
+      // attachments
+      JSONObject jao = new JSONObject();
+      jao.put("name", "credentials.txt");
+      jao.put("type", "text");
+      jao.put("content", data_encode);
+      // 
+      JSONArray jaa = new JSONArray();
+      jaa.put(jao);
+      //main
+      JSONObject mainObj = new JSONObject();
+      mainObj.put("attachments", jaa);
+      mainObj.put("template", "reportrepsol");    
+      mainObj.put("subject", "Credentials");
+      mainObj.put("to", ja);
+
+      StringEntity entity = new StringEntity(mainObj.toString(), ContentType.APPLICATION_JSON);
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      HttpPost request = new HttpPost(link);
+      request.setEntity(entity);
+
+      try {
+          HttpResponse response = httpClient.execute(request);
+          return "success";
+      } catch (Exception exh) {
+          System.out.println(exh);
+          return "error " + exh;
+      }
+
+    //   return "success";
     }
 
     public String updateUser(String id, User user) {// , List<Map<String, String>> rolesClient) {
