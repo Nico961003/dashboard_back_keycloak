@@ -291,7 +291,7 @@ public class UserService {
         String firstName = user.getFirstName();
         String email = user.getEmail();
         // System.out.println("EMAIL: " + email);
-        String pass = user.getPassword();
+        // String pass = user.getPassword();
         String realm = user.getRealm();
         String group = user.getGroup();
         Boolean enabled = user.getEnabled();
@@ -300,9 +300,9 @@ public class UserService {
         UserResource userUp = instance.realm(realm).users().get(id);
         UserRepresentation userRep = userUp.toRepresentation();
         CredentialRepresentation credential = new CredentialRepresentation();
-        credential.setType(CredentialRepresentation.PASSWORD);
-        credential.setValue(pass);
-        credential.setTemporary(false);
+        // credential.setType(CredentialRepresentation.PASSWORD);
+        // credential.setValue(pass);
+        // credential.setTemporary(false);
         // userRep.setUsername(username);
         userRep.setFirstName(firstName);
         userRep.setLastName(lastName);
