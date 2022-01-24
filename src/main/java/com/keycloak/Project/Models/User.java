@@ -26,6 +26,7 @@ public class User {
     private String group;
     private Boolean enabled;
     private String idClient;
+    private String refresh;
 
     // private String idClient;
     // private String idRole;
@@ -43,7 +44,7 @@ public class User {
     }
 
     public User(long id, String username, String lastName, String firstName, String email, String password,
-            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient, List<String> attributes) {
+            String realm, String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient, List<String> attributes, String refresh) {
         this.id = id;
         this.username = username;
         this.lastName = lastName;
@@ -56,10 +57,11 @@ public class User {
         this.rolesClient = rolesClient;
         this.idClient = idClient;
         this.attributes = attributes;
+        this.refresh = refresh;
     }
 
     public User(String username, String lastName, String firstName, String email, String password, String realm,
-            String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient, List<String> attributes) {
+            String group, Boolean enabled, List<Map<String, String>> rolesClient, String idClient, List<String> attributes, String refresh) {
         this.username = username;
         this.lastName = lastName;
         this.firstName = firstName;
@@ -71,6 +73,7 @@ public class User {
         this.rolesClient = rolesClient;
         this.idClient = idClient;
         this.attributes = attributes;
+        this.refresh = refresh;
     }
 
     public long getId() {
@@ -169,9 +172,17 @@ public class User {
         this.attributes = attributes;
     }
 
+    public String getRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(String refresh) {
+        this.refresh = refresh;
+    }
+
     @Override
     public String toString() {
-        return "User [attributes=" + attributes + ",email=" + email + ", enabled=" + enabled + ", firstName=" + firstName + ", group=" + group
+        return "User [refresh=" + refresh + ",attributes=" + attributes + ",email=" + email + ", enabled=" + enabled + ", firstName=" + firstName + ", group=" + group
                 + ", idClient=" + idClient + ", lastName=" + lastName + ", password=" + password + ", realm=" + realm
                 + ", rolesClient=" + rolesClient + ", username=" + username + "]";
     }

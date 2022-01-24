@@ -31,6 +31,8 @@ import org.keycloak.admin.client.resource.*;
 // import com.keycloak.Project.Services.UserService;
 import com.keycloak.Project.Models.User;
 
+
+
 @RestController
 @RequestMapping("/token")
 public class TokenController {
@@ -39,22 +41,48 @@ public class TokenController {
 
     @PostMapping("/newToken")
     public ResponseEntity<String> token(@RequestBody User user) {
+
         String name = user.getUsername();
         String pass = user.getPassword();
         String realm = System.getenv("REALM_KEY");// user.getRealm();
         String tok = "";
+
         try {
             Keycloak instance = userService.instanceT(realm, name, pass);
             TokenManager tokenmanager = instance.tokenManager();
             String accessToken = tokenmanager.getAccessTokenString();
-            // println(tokenmanager.getAccessTokenString())
-
             tok = accessToken;
-            System.out.println(tok);
+
+            // System.out.println(tok);
         } catch (Exception eto) {
             System.out.println("No se pudo obtener token \n" + eto);
         }
+
         return ResponseEntity.ok(tok);
     }
+
+    @PostMapping("/refreshToken")
+    public ResponseEntity<String> refreshToken(@RequestBody User user) {
+
+        String tok = "";
+        String clientId = user.getIdClient();
+        String authorization = user.getRefresh();
+
+        // System.out.println(clientId);
+        // System.out.println(authorization);
+        
+        try {
+
+            String refreshToken = userService.refreshT(authorization, clientId);
+            tok = refreshToken;
+
+            // System.out.println(tok);
+        } catch (Exception eto) {
+            System.out.println("No se pudo obtener token \n" + eto);
+        }
+
+        return ResponseEntity.ok(tok);
+    }
+
 
 }
