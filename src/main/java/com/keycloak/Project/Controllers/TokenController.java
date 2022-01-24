@@ -10,8 +10,12 @@ import javax.annotation.security.RolesAllowed;
 import com.keycloak.Project.Services.UserService;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessTokenResponse;
 import org.keycloak.representations.IDToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +35,6 @@ import org.keycloak.admin.client.resource.*;
 // import com.keycloak.Project.Services.UserService;
 import com.keycloak.Project.Models.User;
 
-
-
 @RestController
 @RequestMapping("/token")
 public class TokenController {
@@ -40,25 +42,32 @@ public class TokenController {
     UserService userService;
 
     @PostMapping("/newToken")
-    public ResponseEntity<String> token(@RequestBody User user) {
+    public Map<String, String> token(@RequestBody User user) {
 
         String name = user.getUsername();
         String pass = user.getPassword();
         String realm = System.getenv("REALM_KEY");// user.getRealm();
         String tok = "";
+        String refresTok = "";
+        Map<String, String> tokens = new HashMap<String, String>();
 
         try {
             Keycloak instance = userService.instanceT(realm, name, pass);
             TokenManager tokenmanager = instance.tokenManager();
             String accessToken = tokenmanager.getAccessTokenString();
             tok = accessToken;
+            tokens.put("Token", tok);
+
+            AccessTokenResponse accessTokenResponse = tokenmanager.refreshToken();
+            refresTok = accessTokenResponse.getRefreshToken();
+            tokens.put("RefreshToken", refresTok);
 
             // System.out.println(tok);
         } catch (Exception eto) {
             System.out.println("No se pudo obtener token \n" + eto);
         }
 
-        return ResponseEntity.ok(tok);
+        return tokens;
     }
 
     @PostMapping("/refreshToken")
@@ -70,7 +79,7 @@ public class TokenController {
 
         // System.out.println(clientId);
         // System.out.println(authorization);
-        
+
         try {
 
             String refreshToken = userService.refreshT(authorization, clientId);
@@ -83,6 +92,5 @@ public class TokenController {
 
         return ResponseEntity.ok(tok);
     }
-
 
 }
